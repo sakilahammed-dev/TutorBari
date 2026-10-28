@@ -1,0 +1,55 @@
+import React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
+
+const buttonVariants = cva(
+  "inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]",
+  {
+    variants: {
+      variant: {
+        default:
+          "bg-[#0675c1] text-white shadow-sm hover:bg-[#125a9c] focus-visible:ring-[#0675c1]",
+        success:
+          "bg-[#00a65a] text-white shadow-sm hover:bg-[#008d4c] focus-visible:ring-[#00a65a]",
+        destructive:
+          "bg-red-500 text-white shadow-sm hover:bg-red-600 focus-visible:ring-red-500",
+        outline:
+          "border border-slate-300 bg-white text-slate-800 hover:bg-slate-50 hover:border-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100",
+        secondary:
+          "bg-[#0675c11a] text-[#0675c1] hover:bg-[#0675c126] dark:bg-sky-950 dark:text-sky-300",
+        ghost:
+          "text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800",
+        link: "text-[#0675c1] underline-offset-4 hover:underline",
+      },
+      size: {
+        default: "h-11 px-5 py-2.5",
+        sm: "h-9 rounded-md px-3.5 text-xs",
+        lg: "h-12 rounded-lg px-7 text-base font-bold",
+        icon: "h-10 w-10",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+);
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean;
+}
+
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, ...props }, ref) => {
+    return (
+      <button
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    );
+  }
+);
+Button.displayName = "Button";

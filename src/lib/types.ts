@@ -70,8 +70,10 @@ export interface TutorProfile {
   email?: string;
   gender: Gender;
   bio?: string;
+  tutoringExperience?: string;
   dateOfBirth?: string;
   bloodGroup?: string;
+  religion?: string;
   emergencyContact?: string;
   presentAddress?: string;
   permanentAddress?: string;
@@ -100,6 +102,11 @@ export interface JobPost {
   guardianId: string;
   guardianName?: string;
   guardianPhone?: string;
+  studentName?: string;
+  instituteName?: string;
+  preferredTutorUniversity?: string;
+  hireDate?: string;
+  curriculumDetails?: string;
   tuitionType: TuitionType;
   category: string;
   className: string;
@@ -131,7 +138,11 @@ export interface JobApplication {
   tutorRating?: number;
   tutorVerified?: boolean;
   expectedSalary?: number;
+  availableFrom?: string;
+  availableDays?: number;
+  convenientTime?: string;
   coverNote?: string;
+  agreementAccepted?: boolean;
   status: ApplicationStatus;
   demoDate?: string;
   demoTime?: string;

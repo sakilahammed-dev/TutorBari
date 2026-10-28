@@ -87,16 +87,22 @@ export async function PUT(req: NextRequest) {
       preferredCategories,
       availableDays,
       availableTime,
+      tutoringExperience,
+      religion,
+      preferredClasses,
+      preferredSubjects,
     } = body;
 
     const updated = DB.updateTutorProfile(tutor.id, {
       ...(name && { name }),
       ...(gender && { gender }),
       ...(bio !== undefined && { bio }),
+      ...(tutoringExperience !== undefined && { tutoringExperience }),
       ...(institution && { institution }),
       ...(department && { department }),
       ...(dateOfBirth && { dateOfBirth }),
       ...(bloodGroup && { bloodGroup }),
+      ...(religion && { religion }),
       ...(emergencyContact && { emergencyContact }),
       ...(presentAddress && { presentAddress }),
       ...(permanentAddress && { permanentAddress }),
@@ -104,6 +110,8 @@ export async function PUT(req: NextRequest) {
       ...(preferredCities && { preferredCities }),
       ...(preferredLocations && { preferredLocations }),
       ...(preferredCategories && { preferredCategories }),
+      ...(preferredClasses && { preferredClasses }),
+      ...(preferredSubjects && { preferredSubjects }),
       ...(availableDays && { availableDays: Number(availableDays) }),
       ...(availableTime && { availableTime }),
     });

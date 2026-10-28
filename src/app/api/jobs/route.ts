@@ -62,6 +62,12 @@ export async function POST(req: NextRequest) {
       otherRequirements,
       guardianName,
       guardianPhone,
+      guardianEmail,
+      studentName,
+      instituteName,
+      preferredTutorUniversity,
+      hireDate,
+      curriculumDetails,
     } = body;
 
     let guardianUser: any = null;
@@ -94,6 +100,7 @@ export async function POST(req: NextRequest) {
           id: newUserId,
           name: guardianName || "Guardian",
           phone: guardianPhone,
+          email: guardianEmail || undefined,
           passwordHash,
           role: "GUARDIAN",
           isPhoneVerified: true,
@@ -136,6 +143,11 @@ export async function POST(req: NextRequest) {
     const sanitizedAddress = sanitizeInput(detailedAddress);
     const sanitizedReqs = sanitizeInput(otherRequirements);
     const sanitizedGuardianName = sanitizeInput(guardianName);
+    const sanitizedStudentName = sanitizeInput(studentName);
+    const sanitizedInstitute = sanitizeInput(instituteName);
+    const sanitizedUnivPref = sanitizeInput(preferredTutorUniversity);
+    const sanitizedHireDate = sanitizeInput(hireDate);
+    const sanitizedCurriculum = sanitizeInput(curriculumDetails);
 
     const resolvedTitle =
       sanitizedTitle || `Need ${category || "General"} Tutor For ${className || "Student"} (${tuitionType || "Home Tutoring"})`;
@@ -145,6 +157,11 @@ export async function POST(req: NextRequest) {
       guardianId: guardianProfile ? guardianProfile.id : `grd_${guardianUser.id}`,
       guardianName: guardianUser.name || sanitizedGuardianName,
       guardianPhone: guardianUser.phone,
+      studentName: sanitizedStudentName || undefined,
+      instituteName: sanitizedInstitute || undefined,
+      preferredTutorUniversity: sanitizedUnivPref || undefined,
+      hireDate: sanitizedHireDate || undefined,
+      curriculumDetails: sanitizedCurriculum || undefined,
       tuitionType: tuitionType || "Home Tutoring",
       category: category || "General",
       className: className || "Class 1",

@@ -46,17 +46,33 @@ export async function POST(
     }
 
     const body = await req.json().catch(() => ({}));
-    const { expectedSalary, coverNote } = body;
+    const {
+      expectedSalary,
+      coverNote,
+      availableFrom,
+      availableDays,
+      convenientTime,
+      agreementAccepted,
+    } = body;
     const sanitizedCoverNote = sanitizeInput(coverNote);
+    const sanitizedAvailFrom = sanitizeInput(availableFrom);
+    const sanitizedTime = sanitizeInput(convenientTime);
 
     const application = DB.applyToJob({
       jobId,
       tutorId: tutor.id,
       tutorName: tutor.name,
+      tutorPhone: tutor.phone,
       tutorInstitution: tutor.institution,
+      tutorDepartment: tutor.department,
       tutorRating: tutor.rating,
+      tutorVerified: tutor.isVerified,
       expectedSalary: expectedSalary ? Number(expectedSalary) : undefined,
+      availableFrom: sanitizedAvailFrom || "Immediately",
+      availableDays: availableDays ? Number(availableDays) : undefined,
+      convenientTime: sanitizedTime || undefined,
       coverNote: sanitizedCoverNote || "I am interested in tutoring this student and confident in delivering excellent results.",
+      agreementAccepted: Boolean(agreementAccepted),
     });
 
     return NextResponse.json(

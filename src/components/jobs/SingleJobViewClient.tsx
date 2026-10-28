@@ -29,6 +29,10 @@ export function SingleJobViewClient({ jobId, initialJob }: SingleJobViewClientPr
   // Application Modal state
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [expectedSalary, setExpectedSalary] = useState("");
+  const [availableFrom, setAvailableFrom] = useState("Immediately");
+  const [availableDays, setAvailableDays] = useState(3);
+  const [convenientTime, setConvenientTime] = useState("Evening (After 5:00 PM)");
+  const [agreementAccepted, setAgreementAccepted] = useState(true);
   const [coverNote, setCoverNote] = useState("");
   const [applying, setApplying] = useState(false);
   const [applyError, setApplyError] = useState<string | null>(null);
@@ -62,6 +66,12 @@ export function SingleJobViewClient({ jobId, initialJob }: SingleJobViewClientPr
     setApplying(true);
     setApplyError(null);
 
+    if (!agreementAccepted) {
+      setApplyError("You must accept the platform commission policy to apply.");
+      setApplying(false);
+      return;
+    }
+
     try {
       const res = await fetch(`/api/jobs/${jobId}/apply`, {
         method: "POST",
@@ -69,6 +79,10 @@ export function SingleJobViewClient({ jobId, initialJob }: SingleJobViewClientPr
         body: JSON.stringify({
           expectedSalary: expectedSalary ? parseInt(expectedSalary, 10) : undefined,
           coverNote,
+          availableFrom,
+          availableDays: Number(availableDays),
+          convenientTime,
+          agreementAccepted,
         }),
       });
 
@@ -249,6 +263,41 @@ export function SingleJobViewClient({ jobId, initialJob }: SingleJobViewClientPr
                   <span className="text-slate-500 font-medium">Subjects:</span>
                   <span className="font-bold text-slate-900 text-right">{job.subjects}</span>
                 </div>
+
+                {job.instituteName && (
+                  <div className="flex justify-between p-3 rounded-lg bg-slate-50 border border-slate-100">
+                    <span className="text-slate-500 font-medium">School / College:</span>
+                    <span className="font-bold text-slate-900">{job.instituteName}</span>
+                  </div>
+                )}
+
+                {job.curriculumDetails && (
+                  <div className="flex justify-between p-3 rounded-lg bg-slate-50 border border-slate-100">
+                    <span className="text-slate-500 font-medium">Curriculum / Stream:</span>
+                    <span className="font-semibold text-slate-800">{job.curriculumDetails}</span>
+                  </div>
+                )}
+
+                {job.hireDate && (
+                  <div className="flex justify-between p-3 rounded-lg bg-slate-50 border border-slate-100">
+                    <span className="text-slate-500 font-medium">Desired Starting Date:</span>
+                    <span className="font-semibold text-emerald-700">{job.hireDate}</span>
+                  </div>
+                )}
+
+                {job.preferredTutorUniversity && (
+                  <div className="flex justify-between p-3 rounded-lg bg-slate-50 border border-slate-100">
+                    <span className="text-slate-500 font-medium">Preferred University:</span>
+                    <span className="font-semibold text-indigo-700">{job.preferredTutorUniversity}</span>
+                  </div>
+                )}
+
+                {job.studentName && (
+                  <div className="flex justify-between p-3 rounded-lg bg-slate-50 border border-slate-100">
+                    <span className="text-slate-500 font-medium">Student Name:</span>
+                    <span className="font-semibold text-slate-800">{job.studentName}</span>
+                  </div>
+                )}
               </div>
 
               {/* Other Requirements */}
@@ -416,9 +465,62 @@ export function SingleJobViewClient({ jobId, initialJob }: SingleJobViewClientPr
                 <span className="text-[11px] text-slate-400 mt-1 block">Leave blank to accept the guardian&apos;s offered salary.</span>
               </div>
 
+              {/* Schedule Availability */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs font-semibold text-slate-700 block mb-1">
+                    Available From
+                  </label>
+                  <select
+                    value={availableFrom}
+                    onChange={(e) => setAvailableFrom(e.target.value)}
+                    className="h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-xs text-slate-900 focus:border-[#0675c1] focus:outline-none"
+                  >
+                    <option value="Immediately">Immediately (Within 24-48 Hours)</option>
+                    <option value="Within 3 days">Within 3 Days</option>
+                    <option value="From next week">From Next Week</option>
+                    <option value="From 1st of next month">From 1st of Next Month</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-xs font-semibold text-slate-700 block mb-1">
+                    Available Days / Week
+                  </label>
+                  <select
+                    value={availableDays}
+                    onChange={(e) => setAvailableDays(Number(e.target.value))}
+                    className="h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-xs text-slate-900 focus:border-[#0675c1] focus:outline-none"
+                  >
+                    {[2, 3, 4, 5, 6].map((d) => (
+                      <option key={d} value={d}>
+                        {d} Days / Week
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
               <div>
                 <label className="text-xs font-semibold text-slate-700 block mb-1">
-                  Cover Note / Proposal to Guardian
+                  Convenient Tutoring Shift / Time
+                </label>
+                <select
+                  value={convenientTime}
+                  onChange={(e) => setConvenientTime(e.target.value)}
+                  className="h-11 w-full rounded-lg border border-slate-300 bg-white px-3 text-xs text-slate-900 focus:border-[#0675c1] focus:outline-none"
+                >
+                  <option value="Evening (After 5:00 PM)">Evening (After 5:00 PM)</option>
+                  <option value="Afternoon (3:00 PM - 5:00 PM)">Afternoon (3:00 PM - 5:00 PM)</option>
+                  <option value="Morning (8:00 AM - 12:00 PM)">Morning (8:00 AM - 12:00 PM)</option>
+                  <option value="Night (After 7:30 PM)">Night (After 7:30 PM)</option>
+                  <option value="Flexible / Mutual Agreement">Flexible / Mutual Agreement</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-slate-700 block mb-1">
+                  Cover Note / Proposal to Guardian <span className="text-red-500">*</span>
                 </label>
                 <textarea
                   rows={4}
@@ -429,6 +531,20 @@ export function SingleJobViewClient({ jobId, initialJob }: SingleJobViewClientPr
                   className="w-full rounded-lg border border-slate-300 bg-white p-3 text-sm text-slate-900 focus:border-[#0675c1] focus:outline-none"
                 />
               </div>
+
+              {/* Commission Agreement Checkbox (Caretutors Policy) */}
+              <label className="flex items-start gap-2.5 cursor-pointer text-xs text-slate-600 p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+                <input
+                  type="checkbox"
+                  required
+                  checked={agreementAccepted}
+                  onChange={(e) => setAgreementAccepted(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 rounded border-slate-300 text-[#0675c1] focus:ring-[#0675c1]"
+                />
+                <span>
+                  I agree that upon appointment, <strong>55% platform commission</strong> on the first month&apos;s salary is payable to TutorBari within 7 days of confirmation.
+                </span>
+              </label>
 
               <div className="flex items-center justify-end gap-3 pt-2">
                 <Button

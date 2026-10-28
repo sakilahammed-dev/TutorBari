@@ -36,12 +36,16 @@ export default function HireATutorPage() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Form State
-  // Step 1: Tuition Details
+  // Step 1: Tuition Details & School
   const [tuitionType, setTuitionType] = useState("Home Tutoring");
   const [category, setCategory] = useState("English Medium");
   const [className, setClassName] = useState("Class 5");
+  const [instituteName, setInstituteName] = useState("");
+  const [curriculumDetails, setCurriculumDetails] = useState("Cambridge Curriculum");
 
   // Step 2: Student & Schedule Info
+  const [studentName, setStudentName] = useState("");
+  const [hireDate, setHireDate] = useState("Immediately (Within 24-48 Hours)");
   const [noOfStudents, setNoOfStudents] = useState(1);
   const [studentGender, setStudentGender] = useState<"Male" | "Female">("Male");
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([
@@ -58,10 +62,12 @@ export default function HireATutorPage() {
   const [location, setLocation] = useState("Dhanmondi");
   const [detailedAddress, setDetailedAddress] = useState("");
   const [preferredTutorGender, setPreferredTutorGender] = useState<"Any" | "Male" | "Female">("Any");
+  const [preferredTutorUniversity, setPreferredTutorUniversity] = useState("Any Reputed University");
   const [otherRequirements, setOtherRequirements] = useState("");
   const [salary, setSalary] = useState("8,000");
   const [guardianName, setGuardianName] = useState("");
   const [guardianPhone, setGuardianPhone] = useState("");
+  const [guardianEmail, setGuardianEmail] = useState("");
   const [termsAgreed, setTermsAgreed] = useState(true);
 
   // Fetch current user session
@@ -73,6 +79,7 @@ export default function HireATutorPage() {
           setCurrentUser(data.user);
           if (data.user.name) setGuardianName(data.user.name);
           if (data.user.phone) setGuardianPhone(data.user.phone);
+          if (data.user.email) setGuardianEmail(data.user.email);
         }
       })
       .catch(() => {});
@@ -207,9 +214,14 @@ export default function HireATutorPage() {
         tuitionType,
         category,
         className,
+        instituteName: instituteName || undefined,
+        curriculumDetails: curriculumDetails || undefined,
+        studentName: studentName || undefined,
+        hireDate: hireDate || undefined,
         subjects: selectedSubjects.join(", "),
         studentGender,
         preferredTutorGender,
+        preferredTutorUniversity: preferredTutorUniversity || undefined,
         tutoringDaysPerWeek,
         tutoringTime,
         noOfStudents,
@@ -220,6 +232,7 @@ export default function HireATutorPage() {
         otherRequirements,
         guardianName: guardianName || currentUser?.name || "Guardian",
         guardianPhone: guardianPhone || currentUser?.phone,
+        guardianEmail: guardianEmail || undefined,
       };
 
       const res = await fetch("/api/jobs", {
@@ -446,6 +459,42 @@ export default function HireATutorPage() {
                 </select>
               </div>
 
+              {/* School / Institute Name */}
+              <div>
+                <label className="block text-sm font-bold text-slate-900 mb-2">
+                  Student&apos;s School / College / Institute (Optional)
+                </label>
+                <input
+                  type="text"
+                  value={instituteName}
+                  onChange={(e) => setInstituteName(e.target.value)}
+                  placeholder="e.g. Scholastica, Notre Dame College, Viqarunnisa, St. Joseph, Sunbeams..."
+                  className="w-full h-12 rounded-xl border border-slate-200 px-4 text-sm text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
+                />
+              </div>
+
+              {/* Curriculum / Stream Details */}
+              <div>
+                <label className="block text-sm font-bold text-slate-900 mb-2">
+                  Curriculum Details / Academic Stream
+                </label>
+                <select
+                  value={curriculumDetails}
+                  onChange={(e) => setCurriculumDetails(e.target.value)}
+                  className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
+                >
+                  <option value="Cambridge Curriculum">Cambridge Curriculum (IGCSE / O / A Level)</option>
+                  <option value="Edexcel Curriculum">Edexcel Curriculum (IAL / Pearson)</option>
+                  <option value="National Curriculum (English Version)">National Curriculum (English Version - NCTB)</option>
+                  <option value="National Curriculum (Bangla Medium - Science)">National Curriculum (Bangla Medium - Science)</option>
+                  <option value="National Curriculum (Bangla Medium - Commerce)">National Curriculum (Bangla Medium - Business Studies)</option>
+                  <option value="National Curriculum (Bangla Medium - Humanities)">National Curriculum (Bangla Medium - Humanities)</option>
+                  <option value="IB (International Baccalaureate)">IB (International Baccalaureate)</option>
+                  <option value="Madrasah / Dakhil / Alim">Madrasah (Dakhil / Alim / Fazil)</option>
+                  <option value="General / Skill Development">General / Language / Skill Development</option>
+                </select>
+              </div>
+
               {/* Next Step Button */}
               <div className="pt-4 border-t border-slate-100 flex justify-end">
                 <Button
@@ -462,6 +511,39 @@ export default function HireATutorPage() {
           {/* STEP 2: STUDENT & SCHEDULE */}
           {step === 2 && (
             <div className="space-y-8 animate-in fade-in duration-200">
+              {/* Student Name & Start Date */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-bold text-slate-900 mb-2">
+                    Student Name or Nickname (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={studentName}
+                    onChange={(e) => setStudentName(e.target.value)}
+                    placeholder="e.g. Aayan, Rodela, Tashfeen..."
+                    className="w-full h-11 rounded-xl border border-slate-200 px-3.5 text-xs text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-slate-900 mb-2">
+                    When Do You Need Tutor To Start? <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    value={hireDate}
+                    onChange={(e) => setHireDate(e.target.value)}
+                    className="w-full h-11 rounded-xl border border-slate-200 bg-white px-3.5 text-xs font-semibold text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
+                  >
+                    <option value="Immediately (Within 24-48 Hours)">Immediately (Within 24-48 Hours)</option>
+                    <option value="Within This Week">Within This Week</option>
+                    <option value="From 1st of Next Month">From 1st of Next Month</option>
+                    <option value="After Upcoming Exams">After Upcoming Exams</option>
+                    <option value="Flexible / Negotiable">Flexible / Negotiable</option>
+                  </select>
+                </div>
+              </div>
+
               {/* Number of Students & Gender */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
@@ -719,16 +801,35 @@ export default function HireATutorPage() {
                 </div>
               </div>
 
+              {/* Preferred Tutor University Background */}
+              <div>
+                <label className="block text-sm font-bold text-slate-900 mb-2">
+                  Preferred Tutor University / Institution Background
+                </label>
+                <select
+                  value={preferredTutorUniversity}
+                  onChange={(e) => setPreferredTutorUniversity(e.target.value)}
+                  className="w-full h-11 rounded-xl border border-slate-200 bg-white px-3.5 text-xs font-semibold text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
+                >
+                  <option value="Any Reputed University">Any Reputed University (All Verified Tutors)</option>
+                  <option value="Public Universities (BUET, DU, Medical, JU, RU)">Public Universities (BUET, DU, Medical, JU, RU)</option>
+                  <option value="Engineering Specialist (BUET, CKRUET, MIST, IUT)">Engineering Specialist (BUET, CKRUET, MIST, IUT)</option>
+                  <option value="Medical Colleges (DMC, SSMC, ShSMC)">Medical Colleges (DMC, SSMC, ShSMC, etc.)</option>
+                  <option value="Top Private Universities (NSU, BRACU, AIUB, IUB)">Top Private Universities (NSU, BRACU, AIUB, IUB)</option>
+                  <option value="English Medium Background Tutors">English Medium Background Tutors (Scholastica, Sunbeams, Mastermind Alums)</option>
+                </select>
+              </div>
+
               {/* Special Requirements */}
               <div>
                 <label className="block text-sm font-bold text-slate-900 mb-2">
-                  Special Requirements / Preferred University
+                  Special Requirements / Preferred University or Notes
                 </label>
                 <textarea
                   rows={2}
                   value={otherRequirements}
                   onChange={(e) => setOtherRequirements(e.target.value)}
-                  placeholder="e.g. Tutor must be from BUET / Dhaka University / English Medium background with proven teaching experience..."
+                  placeholder="e.g. Tutor must have proven teaching experience in these subjects..."
                   className="w-full rounded-xl border border-slate-200 p-3.5 text-xs text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
                 />
               </div>
@@ -765,6 +866,18 @@ export default function HireATutorPage() {
                       placeholder="e.g. 01711XXXXXX"
                       disabled={!!currentUser}
                       className="w-full h-10 rounded-lg border border-slate-300 bg-white px-3 text-xs text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1] disabled:bg-slate-100 disabled:text-slate-500"
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                      Email Address (Optional - for invoices & confirmation letter)
+                    </label>
+                    <input
+                      type="email"
+                      value={guardianEmail}
+                      onChange={(e) => setGuardianEmail(e.target.value)}
+                      placeholder="e.g. guardian@example.com"
+                      className="w-full h-10 rounded-lg border border-slate-300 bg-white px-3 text-xs text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
                     />
                   </div>
                 </div>

@@ -39,10 +39,12 @@ export function TutorProfileClient() {
   const [name, setName] = useState("");
   const [gender, setGender] = useState<"Male" | "Female" | "Any">("Male");
   const [bio, setBio] = useState("");
+  const [tutoringExperience, setTutoringExperience] = useState("2 Years");
   const [institution, setInstitution] = useState("");
   const [department, setDepartment] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [bloodGroup, setBloodGroup] = useState("");
+  const [religion, setReligion] = useState("Islam");
   const [emergencyContact, setEmergencyContact] = useState("");
   const [presentAddress, setPresentAddress] = useState("");
   const [permanentAddress, setPermanentAddress] = useState("");
@@ -67,6 +69,18 @@ export function TutorProfileClient() {
   const [preferredCategories, setPreferredCategories] = useState<string[]>([
     "English Medium",
     "Bangla Medium",
+  ]);
+  const [preferredClasses, setPreferredClasses] = useState<string[]>([
+    "Class 8",
+    "Class 9",
+    "Class 10 (SSC)",
+    "O Level",
+  ]);
+  const [preferredSubjects, setPreferredSubjects] = useState<string[]>([
+    "Mathematics",
+    "Physics",
+    "Chemistry",
+    "English",
   ]);
   const [availableDays, setAvailableDays] = useState(4);
   const [availableTime, setAvailableTime] = useState("Evening (After 5:30 PM)");
@@ -108,6 +122,55 @@ export function TutorProfileClient() {
     "Test Prep",
   ];
 
+  const availableClassesList = [
+    "Class 1 - 5",
+    "Class 6",
+    "Class 7",
+    "Class 8",
+    "Class 9",
+    "Class 10 (SSC)",
+    "HSC 1st Year",
+    "HSC 2nd Year",
+    "O Level",
+    "A Level",
+    "Admission Test",
+  ];
+
+  const availableSubjectsList = [
+    "Mathematics",
+    "Higher Math",
+    "Physics",
+    "Chemistry",
+    "Biology",
+    "General Science",
+    "English",
+    "Bangla",
+    "ICT",
+    "Accounting",
+    "Economics",
+    "Business Studies",
+  ];
+
+  const toggleClass = (cls: string) => {
+    if (preferredClasses.includes(cls)) {
+      if (preferredClasses.length > 1) {
+        setPreferredClasses(preferredClasses.filter((c) => c !== cls));
+      }
+    } else {
+      setPreferredClasses([...preferredClasses, cls]);
+    }
+  };
+
+  const toggleSubject = (sub: string) => {
+    if (preferredSubjects.includes(sub)) {
+      if (preferredSubjects.length > 1) {
+        setPreferredSubjects(preferredSubjects.filter((s) => s !== sub));
+      }
+    } else {
+      setPreferredSubjects([...preferredSubjects, sub]);
+    }
+  };
+
   const loadProfile = () => {
     fetch("/api/tutor/profile")
       .then((res) => {
@@ -124,10 +187,12 @@ export function TutorProfileClient() {
           setName(p.name || "");
           setGender(p.gender || "Male");
           setBio(p.bio || "");
+          setTutoringExperience(p.tutoringExperience || "2 Years");
           setInstitution(p.institution || "");
           setDepartment(p.department || "");
           setDateOfBirth(p.dateOfBirth || "2002-05-14");
           setBloodGroup(p.bloodGroup || "B+");
+          setReligion(p.religion || "Islam");
           setEmergencyContact(p.emergencyContact || "01811000000");
           setPresentAddress(p.presentAddress || "Dhanmondi, Dhaka");
           setPermanentAddress(p.permanentAddress || "Dhaka, Bangladesh");
@@ -137,6 +202,8 @@ export function TutorProfileClient() {
           setPreferredCities(p.preferredCities || ["Dhaka"]);
           setPreferredLocations(p.preferredLocations || ["Dhanmondi", "Mohammadpur"]);
           setPreferredCategories(p.preferredCategories || ["English Medium"]);
+          setPreferredClasses(p.preferredClasses || ["Class 8", "Class 9", "Class 10 (SSC)", "O Level"]);
+          setPreferredSubjects(p.preferredSubjects || ["Mathematics", "Physics", "Chemistry", "English"]);
           setAvailableDays(p.availableDays || 4);
           setAvailableTime(p.availableTime || "Evening (After 5:30 PM)");
           setDocuments(p.documents || []);
@@ -164,10 +231,12 @@ export function TutorProfileClient() {
           name,
           gender,
           bio,
+          tutoringExperience,
           institution,
           department,
           dateOfBirth,
           bloodGroup,
+          religion,
           emergencyContact,
           presentAddress,
           permanentAddress,
@@ -202,6 +271,8 @@ export function TutorProfileClient() {
           preferredCities,
           preferredLocations,
           preferredCategories,
+          preferredClasses,
+          preferredSubjects,
           availableDays: Number(availableDays),
           availableTime,
         }),
@@ -541,6 +612,42 @@ export function TutorProfileClient() {
                 </div>
               </div>
 
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                    Tutoring Experience <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    value={tutoringExperience}
+                    onChange={(e) => setTutoringExperience(e.target.value)}
+                    className="w-full h-11 rounded-xl border border-slate-200 bg-white px-3 text-xs text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
+                  >
+                    <option value="Fresh / Less than 1 Year">Fresh / Less than 1 Year</option>
+                    <option value="1 - 2 Years">1 - 2 Years</option>
+                    <option value="2 - 3 Years">2 - 3 Years</option>
+                    <option value="3 - 5 Years">3 - 5 Years</option>
+                    <option value="5+ Years">5+ Years Experience</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                    Religion
+                  </label>
+                  <select
+                    value={religion}
+                    onChange={(e) => setReligion(e.target.value)}
+                    className="w-full h-11 rounded-xl border border-slate-200 bg-white px-3 text-xs text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
+                  >
+                    <option value="Islam">Islam</option>
+                    <option value="Hinduism">Hinduism</option>
+                    <option value="Christianity">Christianity</option>
+                    <option value="Buddhism">Buddhism</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+              </div>
+
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1.5">Present Address</label>
                 <input
@@ -704,6 +811,60 @@ export function TutorProfileClient() {
                       >
                         {isSelected && "✓ "}
                         {cat}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Preferred Classes */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-2">
+                  Preferred Classes / Grades <span className="text-red-500">*</span>
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {availableClassesList.map((cls) => {
+                    const isSelected = preferredClasses.includes(cls);
+                    return (
+                      <button
+                        key={cls}
+                        type="button"
+                        onClick={() => toggleClass(cls)}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all ${
+                          isSelected
+                            ? "bg-[#0675c1] text-white border-[#0675c1]"
+                            : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                        }`}
+                      >
+                        {isSelected && "✓ "}
+                        {cls}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Preferred Subjects */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-2">
+                  Preferred Subjects <span className="text-red-500">*</span>
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {availableSubjectsList.map((sub) => {
+                    const isSelected = preferredSubjects.includes(sub);
+                    return (
+                      <button
+                        key={sub}
+                        type="button"
+                        onClick={() => toggleSubject(sub)}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all ${
+                          isSelected
+                            ? "bg-[#0675c1] text-white border-[#0675c1]"
+                            : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                        }`}
+                      >
+                        {isSelected && "✓ "}
+                        {sub}
                       </button>
                     );
                   })}

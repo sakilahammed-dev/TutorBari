@@ -34,6 +34,7 @@ export interface User {
 export interface GuardianProfile {
   id: string;
   userId: string;
+  gender?: Gender;
   emergencyPhone?: string;
   city: string;
   location: string;

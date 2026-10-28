@@ -14,225 +14,193 @@ import {
   ArrowLeft,
   CheckCircle2,
   AlertCircle,
-  Home,
-  Monitor,
-  Users2,
-  Package,
-  Clock,
-  Sparkles,
   ShieldCheck,
   Send,
   Loader2,
   Check,
+  Phone,
+  Sparkles,
+  Award,
+  Clock,
+  HeartHandshake,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 export default function HireATutorPage() {
   const router = useRouter();
 
-  const [step, setStep] = useState<1 | 2 | 3>(1);
-  const [currentUser, setCurrentUser] = useState<any>(null);
-  const [submitting, setSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  // Phase: 1 = Phone Number input ("Please give us your number"), 2 = Details form ("Please give us your details")
+  const [phase, setPhase] = useState<1 | 2>(1);
+  const [activeSlide, setActiveSlide] = useState(0);
 
   // Form State
-  // Step 1: Tuition Details & School
-  const [tuitionType, setTuitionType] = useState("Home Tutoring");
-  const [category, setCategory] = useState("English Medium");
-  const [className, setClassName] = useState("Class 5");
-  const [instituteName, setInstituteName] = useState("");
-  const [curriculumDetails, setCurriculumDetails] = useState("Cambridge Curriculum");
-
-  // Step 2: Student & Schedule Info
-  const [studentName, setStudentName] = useState("");
-  const [hireDate, setHireDate] = useState("Immediately (Within 24-48 Hours)");
-  const [noOfStudents, setNoOfStudents] = useState(1);
-  const [studentGender, setStudentGender] = useState<"Male" | "Female">("Male");
-  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([
-    "Mathematics",
-    "English",
-    "Science",
-  ]);
-  const [customSubject, setCustomSubject] = useState("");
-  const [tutoringDaysPerWeek, setTutoringDaysPerWeek] = useState(3);
-  const [tutoringTime, setTutoringTime] = useState("Evening (After 5:30 PM)");
-
-  // Step 3: Location, Budget, Preferences & Contact
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
   const [city, setCity] = useState("Dhaka");
   const [location, setLocation] = useState("Dhanmondi");
-  const [detailedAddress, setDetailedAddress] = useState("");
+  const [category, setCategory] = useState("English Medium");
+  const [className, setClassName] = useState("Class 8");
+  const [subjects, setSubjects] = useState("Mathematics, English, Science");
+  const [tutoringDaysPerWeek, setTutoringDaysPerWeek] = useState(3);
   const [preferredTutorGender, setPreferredTutorGender] = useState<"Any" | "Male" | "Female">("Any");
-  const [preferredTutorUniversity, setPreferredTutorUniversity] = useState("Any Reputed University");
-  const [otherRequirements, setOtherRequirements] = useState("");
   const [salary, setSalary] = useState("8,000");
-  const [guardianName, setGuardianName] = useState("");
-  const [guardianPhone, setGuardianPhone] = useState("");
-  const [guardianEmail, setGuardianEmail] = useState("");
+  const [description, setDescription] = useState("");
   const [termsAgreed, setTermsAgreed] = useState(true);
 
-  // Fetch current user session
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [currentUser, setCurrentUser] = useState<any>(null);
+
+  // Check existing session
   useEffect(() => {
     fetch("/api/auth/me")
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (data?.authenticated && data.user) {
           setCurrentUser(data.user);
-          if (data.user.name) setGuardianName(data.user.name);
-          if (data.user.phone) setGuardianPhone(data.user.phone);
-          if (data.user.email) setGuardianEmail(data.user.email);
+          if (data.user.phone) setPhoneNumber(data.user.phone);
+          if (data.user.name) setName(data.user.name);
+          setPhase(2);
         }
       })
       .catch(() => {});
   }, []);
 
+  // Auto-cycle the benefit slides
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % 3);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const cities = [
+    "Dhaka",
+    "Chattogram",
+    "Sylhet",
+    "Rajshahi",
+    "Khulna",
+    "Barishal",
+    "Rangpur",
+    "Mymensingh",
+    "Gazipur",
+    "Narayanganj",
+    "Cumilla",
+  ];
+
+  const popularLocations = [
+    "Dhanmondi",
+    "Gulshan 1",
+    "Gulshan 2",
+    "Banani",
+    "Uttara Sector 1-7",
+    "Uttara Sector 8-14",
+    "Mirpur 1",
+    "Mirpur 2",
+    "Mirpur 10",
+    "Bashundhara R/A",
+    "Mohammadpur",
+    "Banasree",
+    "Badda",
+    "Malibagh",
+    "Panthapath",
+    "Farmgate",
+    "Lalmatia",
+    "Khilgaon",
+    "Shantinagar",
+  ];
+
   const categories = [
-    "Bangla Medium",
     "English Medium",
+    "Bangla Medium",
     "English Version",
     "Religious Studies",
     "Admission Test",
     "Arts",
     "Language Learning",
-    "Test Prep",
-    "Professional Skills",
-    "Special Skills",
+    "Test Preparation",
+    "Professional Skill",
+    "Special Skill",
     "Uni Help",
-    "Madrasah",
-    "Special Child",
+    "Madrasa Medium",
+    "Special Child Education",
   ];
 
-  const getClassOptions = (cat: string) => {
-    switch (cat) {
-      case "English Medium":
-        return ["Play", "Nursery", "KG", "Standard 1", "Standard 2", "Standard 3", "Standard 4", "Standard 5", "Standard 6", "Standard 7", "Standard 8", "O Level", "A Level"];
-      case "Bangla Medium":
-        return ["Play", "KG", "Class 1", "Class 2", "Class 3", "Class 4", "Class 5", "Class 6", "Class 7", "Class 8", "Class 9", "Class 10 (SSC)", "HSC 1st Year", "HSC 2nd Year"];
-      case "English Version":
-        return ["Play", "KG", "Class 1", "Class 2", "Class 3", "Class 4", "Class 5", "Class 6", "Class 7", "Class 8", "Class 9", "Class 10 (SSC)", "HSC 1st Year", "HSC 2nd Year"];
-      case "Religious Studies":
-        return ["Noorani Qaida", "Nazira", "Hifzul Quran", "Tajweed & Qirat", "Basic Islamic Studies", "Arabic Grammar"];
-      case "Admission Test":
-        return ["Engineering (BUET/CKRUET)", "Medical (MBBS/BDS)", "Dhaka University (KA/KHA/GA)", "IBA (DU/JU)", "Private University (NSU/BRAC)"];
-      case "Language Learning":
-        return ["Spoken English", "IELTS Preparation", "Arabic Language", "French", "German", "Japanese"];
-      default:
-        return ["Beginner", "Intermediate", "Advanced", "Professional", "Custom Grade"];
-    }
-  };
-
-  const commonSubjects = [
-    "Mathematics",
-    "English",
-    "Science",
-    "Physics",
-    "Chemistry",
-    "Biology",
-    "Higher Mathematics",
-    "Bangla",
-    "ICT / Computer",
-    "Accounting",
-    "Economics",
-    "Holy Quran & Tajweed",
-    "All General Subjects",
-  ];
-
-  const cities = ["Dhaka", "Chattogram", "Sylhet", "Rajshahi", "Khulna", "Gazipur", "Narayanganj"];
-  const popularLocations = [
-    "Dhanmondi",
-    "Mohammadpur",
-    "Mirpur 1",
-    "Mirpur 2",
-    "Mirpur 10",
-    "Uttara Sector 1-7",
-    "Uttara Sector 8-14",
-    "Gulshan 1",
-    "Gulshan 2",
-    "Banani",
-    "Bashundhara R/A",
-    "Banasree",
-    "Lalmatia",
-    "Badda",
-    "Malibagh",
-    "Shantinagar",
-    "Panthapath",
-    "Farmgate",
-    "Old Dhaka",
-    "Online / Remote",
-  ];
-
-  const toggleSubject = (sub: string) => {
-    if (selectedSubjects.includes(sub)) {
-      if (selectedSubjects.length > 1) {
-        setSelectedSubjects(selectedSubjects.filter((s) => s !== sub));
-      }
-    } else {
-      setSelectedSubjects([...selectedSubjects, sub]);
-    }
-  };
-
-  const handleAddCustomSubject = (e: React.FormEvent) => {
+  // Handle Phase 1 Submit
+  const handlePhoneSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (customSubject.trim() && !selectedSubjects.includes(customSubject.trim())) {
-      setSelectedSubjects([...selectedSubjects, customSubject.trim()]);
-      setCustomSubject("");
-    }
-  };
-
-  const handleNextStep1 = () => {
     setErrorMessage(null);
-    setStep(2);
-  };
 
-  const handleNextStep2 = () => {
-    setErrorMessage(null);
-    if (selectedSubjects.length === 0) {
-      setErrorMessage("Please select at least one subject.");
+    const cleanPhone = phoneNumber.replace(/[^0-9]/g, "");
+    if (cleanPhone.length < 11) {
+      setErrorMessage("Please enter a valid 11-digit mobile number (e.g. 01756441122)");
       return;
     }
-    setStep(3);
+
+    setLoading(true);
+
+    try {
+      // POST to /api/leads/new like Caretutors
+      await fetch("/api/leads/new", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          phone: cleanPhone,
+          name: name || "Guardian",
+          address: location,
+          description: "Initiated hire-a-tutor request",
+        }),
+      }).catch(() => {});
+
+      setPhoneNumber(cleanPhone);
+      setPhase(2);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Handle Final Submission
+  const handleFinalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
 
     if (!termsAgreed) {
-      setErrorMessage("Please accept the Terms & Conditions to proceed.");
+      setErrorMessage("Please accept the Terms of Use and Privacy Policy.");
       return;
     }
 
-    if (!currentUser && (!guardianPhone || guardianPhone.length < 11)) {
-      setErrorMessage("Please enter a valid 11-digit phone number.");
+    if (!name.trim()) {
+      setErrorMessage("Please enter your name.");
       return;
     }
 
-    setSubmitting(true);
+    if (!address.trim()) {
+      setErrorMessage("Please enter your detailed address.");
+      return;
+    }
+
+    setLoading(true);
 
     try {
       const payload = {
-        title: `Need ${category} Tutor For ${className} (${tuitionType})`,
-        tuitionType,
+        title: `Need ${category} Tutor For ${className} (${city}, ${location})`,
+        tuitionType: "Home Tutoring",
         category,
         className,
-        instituteName: instituteName || undefined,
-        curriculumDetails: curriculumDetails || undefined,
-        studentName: studentName || undefined,
-        hireDate: hireDate || undefined,
-        subjects: selectedSubjects.join(", "),
-        studentGender,
+        subjects,
+        studentGender: "Male",
         preferredTutorGender,
-        preferredTutorUniversity: preferredTutorUniversity || undefined,
         tutoringDaysPerWeek,
-        tutoringTime,
-        noOfStudents,
+        tutoringTime: "Evening (After 5:30 PM)",
+        noOfStudents: 1,
         salary,
         city,
         location,
-        detailedAddress: detailedAddress || location,
-        otherRequirements,
-        guardianName: guardianName || currentUser?.name || "Guardian",
-        guardianPhone: guardianPhone || currentUser?.phone,
-        guardianEmail: guardianEmail || undefined,
+        detailedAddress: address,
+        otherRequirements: description,
+        guardianName: name,
+        guardianPhone: phoneNumber,
       };
 
       const res = await fetch("/api/jobs", {
@@ -243,699 +211,367 @@ export default function HireATutorPage() {
 
       const data = await res.json();
       if (!res.ok) {
-        setErrorMessage(data.message || "Failed to post tuition request.");
-        setSubmitting(false);
+        setErrorMessage(data.message || "Failed to submit tuition request.");
+        setLoading(false);
         return;
       }
 
       router.push(`/hire-a-tutor/success?jobId=${data.job.id}`);
     } catch (err) {
-      setErrorMessage("An unexpected network error occurred. Please try again.");
-      setSubmitting(false);
+      setErrorMessage("Network error occurred. Please try again.");
+      setLoading(false);
     }
   };
 
   return (
-    <div className="py-12 bg-slate-50 min-h-screen">
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        {/* Wizard Header */}
-        <div className="text-center mb-8">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#0675c1]/10 text-[#0675c1] mb-2">
-            <Sparkles className="h-3.5 w-3.5" />
-            Post Your Tuition in 3 Simple Steps
-          </span>
-          <h1 className="text-3xl font-black text-slate-900 tracking-tight sm:text-4xl">
-            Hire the Best Tutor in Bangladesh
-          </h1>
-          <p className="mt-2 text-sm text-slate-600 max-w-xl mx-auto">
-            Tell us your requirements and receive applications from verified, expert tutors from BUET, Medical, and DU within 30 minutes.
-          </p>
-        </div>
-
-        {/* 3-Step Visual Progress Bar */}
-        <div className="mb-8">
-          <div className="grid grid-cols-3 gap-2 sm:gap-4 text-center">
-            {/* Step 1 Indicator */}
-            <div
-              onClick={() => step > 1 && setStep(1)}
-              className={`cursor-pointer pb-3 border-b-4 transition-all ${
-                step >= 1 ? "border-[#0675c1] text-[#0675c1]" : "border-slate-200 text-slate-400"
-              }`}
-            >
-              <div className="flex items-center justify-center gap-2">
-                <span
-                  className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold ${
-                    step >= 1 ? "bg-[#0675c1] text-white" : "bg-slate-200 text-slate-500"
-                  }`}
-                >
-                  1
-                </span>
-                <span className="hidden sm:inline text-xs font-bold uppercase tracking-wider">
-                  Tuition Type & Class
-                </span>
-              </div>
-            </div>
-
-            {/* Step 2 Indicator */}
-            <div
-              onClick={() => step > 2 && setStep(2)}
-              className={`cursor-pointer pb-3 border-b-4 transition-all ${
-                step >= 2 ? "border-[#0675c1] text-[#0675c1]" : "border-slate-200 text-slate-400"
-              }`}
-            >
-              <div className="flex items-center justify-center gap-2">
-                <span
-                  className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold ${
-                    step >= 2 ? "bg-[#0675c1] text-white" : "bg-slate-200 text-slate-500"
-                  }`}
-                >
-                  2
-                </span>
-                <span className="hidden sm:inline text-xs font-bold uppercase tracking-wider">
-                  Student & Schedule
-                </span>
-              </div>
-            </div>
-
-            {/* Step 3 Indicator */}
-            <div
-              className={`pb-3 border-b-4 transition-all ${
-                step === 3 ? "border-[#0675c1] text-[#0675c1]" : "border-slate-200 text-slate-400"
-              }`}
-            >
-              <div className="flex items-center justify-center gap-2">
-                <span
-                  className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold ${
-                    step === 3 ? "bg-[#0675c1] text-white" : "bg-slate-200 text-slate-500"
-                  }`}
-                >
-                  3
-                </span>
-                <span className="hidden sm:inline text-xs font-bold uppercase tracking-wider">
-                  Location & Contact
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Error Alert */}
-        {errorMessage && (
-          <div className="mb-6 rounded-xl bg-red-50 p-4 border border-red-200 flex items-center gap-3 text-red-700 text-sm">
-            <AlertCircle className="h-5 w-5 shrink-0" />
-            <span>{errorMessage}</span>
-          </div>
-        )}
-
-        {/* Form Card */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-10 shadow-sm">
-          {/* STEP 1: TUITION TYPE & CATEGORY */}
-          {step === 1 && (
-            <div className="space-y-8 animate-in fade-in duration-200">
-              {/* Select Tuition Type */}
-              <div>
-                <label className="block text-sm font-bold text-slate-900 mb-3">
-                  Select Tuition Type <span className="text-red-500">*</span>
-                </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                  {[
-                    {
-                      id: "Home Tutoring",
-                      icon: Home,
-                      desc: "Tutor visits your home for personalized 1-on-1 offline tutoring.",
-                    },
-                    {
-                      id: "Online Tutoring",
-                      icon: Monitor,
-                      desc: "Live interactive 1-on-1 sessions anywhere via Zoom or Google Meet.",
-                    },
-                    {
-                      id: "Group Tutoring",
-                      icon: Users2,
-                      desc: "Small focused batch of students sharing the tuition.",
-                    },
-                    {
-                      id: "Package Tutoring",
-                      icon: Package,
-                      desc: "Crash course or fixed term preparation for upcoming board exams.",
-                    },
-                  ].map((item) => {
-                    const isSelected = tuitionType === item.id;
-                    const Icon = item.icon;
-                    return (
-                      <div
-                        key={item.id}
-                        onClick={() => setTuitionType(item.id)}
-                        className={`p-4 rounded-xl border-2 cursor-pointer transition-all flex items-start gap-3.5 ${
-                          isSelected
-                            ? "border-[#0675c1] bg-[#0675c1]/5 ring-1 ring-[#0675c1]"
-                            : "border-slate-200 hover:border-slate-300 bg-white"
-                        }`}
-                      >
-                        <div
-                          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${
-                            isSelected ? "bg-[#0675c1] text-white" : "bg-slate-100 text-slate-600"
-                          }`}
-                        >
-                          <Icon className="h-5 w-5" />
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm font-bold text-slate-900">{item.id}</span>
-                            {isSelected && <Check className="h-4 w-4 text-[#0675c1]" />}
-                          </div>
-                          <p className="text-xs text-slate-500 mt-1">{item.desc}</p>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Select Category */}
-              <div>
-                <label className="block text-sm font-bold text-slate-900 mb-3">
-                  Select Medium / Curriculum <span className="text-red-500">*</span>
-                </label>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5">
-                  {categories.map((cat) => {
-                    const isSelected = category === cat;
-                    return (
-                      <button
-                        key={cat}
-                        type="button"
-                        onClick={() => {
-                          setCategory(cat);
-                          setClassName(getClassOptions(cat)[0]);
-                        }}
-                        className={`px-3 py-2.5 rounded-xl text-xs font-bold text-left border transition-all ${
-                          isSelected
-                            ? "bg-[#0675c1] text-white border-[#0675c1] shadow-sm shadow-[#0675c1]/20"
-                            : "bg-slate-50 text-slate-700 border-slate-200 hover:border-slate-300 hover:bg-slate-100"
-                        }`}
-                      >
-                        {cat}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Select Class / Grade */}
-              <div>
-                <label className="block text-sm font-bold text-slate-900 mb-2">
-                  Select Student Class / Level <span className="text-red-500">*</span>
-                </label>
-                <select
-                  value={className}
-                  onChange={(e) => setClassName(e.target.value)}
-                  className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
-                >
-                  {getClassOptions(category).map((cls) => (
-                    <option key={cls} value={cls}>
-                      {cls}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* School / Institute Name */}
-              <div>
-                <label className="block text-sm font-bold text-slate-900 mb-2">
-                  Student&apos;s School / College / Institute (Optional)
-                </label>
-                <input
-                  type="text"
-                  value={instituteName}
-                  onChange={(e) => setInstituteName(e.target.value)}
-                  placeholder="e.g. Scholastica, Notre Dame College, Viqarunnisa, St. Joseph, Sunbeams..."
-                  className="w-full h-12 rounded-xl border border-slate-200 px-4 text-sm text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
-                />
-              </div>
-
-              {/* Curriculum / Stream Details */}
-              <div>
-                <label className="block text-sm font-bold text-slate-900 mb-2">
-                  Curriculum Details / Academic Stream
-                </label>
-                <select
-                  value={curriculumDetails}
-                  onChange={(e) => setCurriculumDetails(e.target.value)}
-                  className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
-                >
-                  <option value="Cambridge Curriculum">Cambridge Curriculum (IGCSE / O / A Level)</option>
-                  <option value="Edexcel Curriculum">Edexcel Curriculum (IAL / Pearson)</option>
-                  <option value="National Curriculum (English Version)">National Curriculum (English Version - NCTB)</option>
-                  <option value="National Curriculum (Bangla Medium - Science)">National Curriculum (Bangla Medium - Science)</option>
-                  <option value="National Curriculum (Bangla Medium - Commerce)">National Curriculum (Bangla Medium - Business Studies)</option>
-                  <option value="National Curriculum (Bangla Medium - Humanities)">National Curriculum (Bangla Medium - Humanities)</option>
-                  <option value="IB (International Baccalaureate)">IB (International Baccalaureate)</option>
-                  <option value="Madrasah / Dakhil / Alim">Madrasah (Dakhil / Alim / Fazil)</option>
-                  <option value="General / Skill Development">General / Language / Skill Development</option>
-                </select>
-              </div>
-
-              {/* Next Step Button */}
-              <div className="pt-4 border-t border-slate-100 flex justify-end">
-                <Button
-                  onClick={handleNextStep1}
-                  className="h-12 px-8 bg-[#0675c1] hover:bg-[#125a9c] text-white font-bold text-sm shadow-md shadow-[#0675c1]/20 gap-2"
-                >
-                  Continue to Step 2
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          )}
-
-          {/* STEP 2: STUDENT & SCHEDULE */}
-          {step === 2 && (
-            <div className="space-y-8 animate-in fade-in duration-200">
-              {/* Student Name & Start Date */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-bold text-slate-900 mb-2">
-                    Student Name or Nickname (Optional)
-                  </label>
-                  <input
-                    type="text"
-                    value={studentName}
-                    onChange={(e) => setStudentName(e.target.value)}
-                    placeholder="e.g. Aayan, Rodela, Tashfeen..."
-                    className="w-full h-11 rounded-xl border border-slate-200 px-3.5 text-xs text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-bold text-slate-900 mb-2">
-                    When Do You Need Tutor To Start? <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    value={hireDate}
-                    onChange={(e) => setHireDate(e.target.value)}
-                    className="w-full h-11 rounded-xl border border-slate-200 bg-white px-3.5 text-xs font-semibold text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
-                  >
-                    <option value="Immediately (Within 24-48 Hours)">Immediately (Within 24-48 Hours)</option>
-                    <option value="Within This Week">Within This Week</option>
-                    <option value="From 1st of Next Month">From 1st of Next Month</option>
-                    <option value="After Upcoming Exams">After Upcoming Exams</option>
-                    <option value="Flexible / Negotiable">Flexible / Negotiable</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Number of Students & Gender */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-bold text-slate-900 mb-2">
-                    Number of Students <span className="text-red-500">*</span>
-                  </label>
-                  <div className="flex gap-2">
-                    {[1, 2, 3, 4].map((num) => (
-                      <button
-                        key={num}
-                        type="button"
-                        onClick={() => setNoOfStudents(num)}
-                        className={`flex-1 h-11 rounded-xl text-sm font-bold border transition-all ${
-                          noOfStudents === num
-                            ? "bg-[#0675c1] text-white border-[#0675c1]"
-                            : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
-                        }`}
-                      >
-                        {num} {num === 1 ? "Student" : "Students"}
-                      </button>
-                    ))}
+    <div className="py-10 lg:py-16 bg-slate-50 min-h-[85vh] flex items-center">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
+          {/* LEFT COLUMN: Visual Illustrations & Trust Badges (Caretutors Style) */}
+          <div className="w-full lg:w-1/2 space-y-8">
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0675c1]/5 to-emerald-50/50 p-8 sm:p-10 border border-slate-200">
+              {/* Slider Content */}
+              <div className="min-h-[220px] flex flex-col justify-center">
+                {activeSlide === 0 && (
+                  <div className="space-y-4 animate-in fade-in duration-300">
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold bg-[#0675c1]/10 text-[#0675c1]">
+                      <Sparkles className="h-4 w-4" />
+                      Bangladesh&apos;s Most Trusted Tutor Platform
+                    </div>
+                    <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight">
+                      Hire Verified Tutors from BUET, Medical &amp; DU in 30 Minutes
+                    </h3>
+                    <p className="text-sm text-slate-600 leading-relaxed">
+                      Over 50,000+ parents trust TutorBari to find background-checked, top-tier academic mentors for their children.
+                    </p>
                   </div>
-                </div>
+                )}
 
-                <div>
-                  <label className="block text-sm font-bold text-slate-900 mb-2">
-                    Student Gender <span className="text-red-500">*</span>
-                  </label>
-                  <div className="flex gap-2">
-                    {(["Male", "Female"] as const).map((g) => (
-                      <button
-                        key={g}
-                        type="button"
-                        onClick={() => setStudentGender(g)}
-                        className={`flex-1 h-11 rounded-xl text-sm font-bold border transition-all ${
-                          studentGender === g
-                            ? "bg-[#0675c1] text-white border-[#0675c1]"
-                            : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
-                        }`}
-                      >
-                        {g}
-                      </button>
-                    ))}
+                {activeSlide === 1 && (
+                  <div className="space-y-4 animate-in fade-in duration-300">
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold bg-[#00a65a]/10 text-[#00a65a]">
+                      <HeartHandshake className="h-4 w-4" />
+                      100% Risk-Free Guarantee
+                    </div>
+                    <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight">
+                      Free Demo Class &amp; 48-Hour Replacement Guarantee
+                    </h3>
+                    <p className="text-sm text-slate-600 leading-relaxed">
+                      Take 1-2 trial classes at home with zero financial commitment. Only confirm if you are 100% satisfied.
+                    </p>
                   </div>
-                </div>
-              </div>
+                )}
 
-              {/* Select Subjects */}
-              <div>
-                <label className="block text-sm font-bold text-slate-900 mb-2">
-                  Select Required Subjects <span className="text-red-500">*</span>
-                </label>
-                <p className="text-xs text-slate-500 mb-3">
-                  Click to select all subjects the tutor needs to teach:
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {commonSubjects.map((sub) => {
-                    const isSelected = selectedSubjects.includes(sub);
-                    return (
-                      <button
-                        key={sub}
-                        type="button"
-                        onClick={() => toggleSubject(sub)}
-                        className={`px-3 py-2 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 ${
-                          isSelected
-                            ? "bg-[#0675c1] text-white border-[#0675c1] shadow-xs"
-                            : "bg-slate-50 text-slate-700 border-slate-200 hover:border-slate-300 hover:bg-slate-100"
-                        }`}
-                      >
-                        {isSelected && <Check className="h-3.5 w-3.5" />}
-                        {sub}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Custom Subject Input */}
-                <div className="mt-3 flex gap-2">
-                  <input
-                    type="text"
-                    value={customSubject}
-                    onChange={(e) => setCustomSubject(e.target.value)}
-                    placeholder="Add other subject (e.g. Statistics, Social Studies)..."
-                    className="flex-1 h-10 rounded-xl border border-slate-200 px-3.5 text-xs text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
-                  />
-                  <Button
-                    type="button"
-                    onClick={handleAddCustomSubject}
-                    variant="outline"
-                    size="sm"
-                    className="text-xs font-bold"
-                  >
-                    Add Subject
-                  </Button>
-                </div>
-              </div>
-
-              {/* Tutoring Days per week & Shift */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-bold text-slate-900 mb-2">
-                    Days Per Week <span className="text-red-500">*</span>
-                  </label>
-                  <div className="flex gap-2">
-                    {[2, 3, 4, 5, 6].map((days) => (
-                      <button
-                        key={days}
-                        type="button"
-                        onClick={() => setTutoringDaysPerWeek(days)}
-                        className={`flex-1 h-11 rounded-xl text-sm font-bold border transition-all ${
-                          tutoringDaysPerWeek === days
-                            ? "bg-[#0675c1] text-white border-[#0675c1]"
-                            : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
-                        }`}
-                      >
-                        {days} Days
-                      </button>
-                    ))}
+                {activeSlide === 2 && (
+                  <div className="space-y-4 animate-in fade-in duration-300">
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold bg-amber-500/10 text-amber-700">
+                      <Award className="h-4 w-4" />
+                      13 Specialized Mediums
+                    </div>
+                    <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight">
+                      English Medium, Bangla, English Version &amp; Admission Test
+                    </h3>
+                    <p className="text-sm text-slate-600 leading-relaxed">
+                      Tailored guidance for Cambridge, Edexcel, NCTB, Medical, BUET engineering and Quranic studies nationwide.
+                    </p>
                   </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-bold text-slate-900 mb-2">
-                    Preferred Tutoring Time <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    value={tutoringTime}
-                    onChange={(e) => setTutoringTime(e.target.value)}
-                    className="w-full h-11 rounded-xl border border-slate-200 bg-white px-3.5 text-xs font-semibold text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
-                  >
-                    <option value="Morning (8:00 AM - 12:00 PM)">Morning (8:00 AM - 12:00 PM)</option>
-                    <option value="Afternoon (2:00 PM - 5:00 PM)">Afternoon (2:00 PM - 5:00 PM)</option>
-                    <option value="Evening (After 5:30 PM)">Evening (After 5:30 PM)</option>
-                    <option value="Night (After 7:30 PM)">Night (After 7:30 PM)</option>
-                    <option value="Flexible / Negotiable">Flexible / Negotiable</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Navigation Buttons */}
-              <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                <Button
-                  onClick={() => setStep(1)}
-                  variant="outline"
-                  className="h-12 px-6 font-bold text-sm gap-2"
-                >
-                  <ArrowLeft className="h-4 w-4" />
-                  Back
-                </Button>
-                <Button
-                  onClick={handleNextStep2}
-                  className="h-12 px-8 bg-[#0675c1] hover:bg-[#125a9c] text-white font-bold text-sm shadow-md shadow-[#0675c1]/20 gap-2"
-                >
-                  Continue to Step 3
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          )}
-
-          {/* STEP 3: LOCATION, BUDGET, TUTOR PREFERENCE & CONTACT */}
-          {step === 3 && (
-            <form onSubmit={handleSubmit} className="space-y-8 animate-in fade-in duration-200">
-              {/* Location & City */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-bold text-slate-900 mb-2">
-                    City <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    className="w-full h-11 rounded-xl border border-slate-200 bg-white px-3.5 text-xs font-semibold text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
-                  >
-                    {cities.map((c) => (
-                      <option key={c} value={c}>
-                        {c}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-bold text-slate-900 mb-2">
-                    Area / Location <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                    className="w-full h-11 rounded-xl border border-slate-200 bg-white px-3.5 text-xs font-semibold text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
-                  >
-                    {popularLocations.map((loc) => (
-                      <option key={loc} value={loc}>
-                        {loc}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              {/* Detailed Address */}
-              <div>
-                <label className="block text-sm font-bold text-slate-900 mb-2">
-                  Detailed Address / Nearby Landmark
-                </label>
-                <input
-                  type="text"
-                  value={detailedAddress}
-                  onChange={(e) => setDetailedAddress(e.target.value)}
-                  placeholder="e.g. House 42, Road 7/A, Near Abahani Field, Dhanmondi..."
-                  className="w-full h-11 rounded-xl border border-slate-200 px-3.5 text-xs text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
-                />
-              </div>
-
-              {/* Preferred Tutor Gender & Salary Budget */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-bold text-slate-900 mb-2">
-                    Preferred Tutor Gender <span className="text-red-500">*</span>
-                  </label>
-                  <div className="flex gap-2">
-                    {(["Any", "Male", "Female"] as const).map((g) => (
-                      <button
-                        key={g}
-                        type="button"
-                        onClick={() => setPreferredTutorGender(g)}
-                        className={`flex-1 h-11 rounded-xl text-xs font-bold border transition-all ${
-                          preferredTutorGender === g
-                            ? "bg-[#0675c1] text-white border-[#0675c1]"
-                            : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
-                        }`}
-                      >
-                        {g === "Any" ? "Any Gender" : `${g} Tutor`}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-bold text-slate-900 mb-2">
-                    Expected Salary (BDT / Month) <span className="text-red-500">*</span>
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      value={salary}
-                      onChange={(e) => setSalary(e.target.value)}
-                      placeholder="e.g. 7,000 or Negotiable"
-                      className="w-full h-11 rounded-xl border border-slate-200 px-3.5 text-xs font-bold text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
-                    />
-                    <span className="absolute right-3.5 top-3 text-[11px] font-bold text-slate-400">
-                      BDT/mo
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Preferred Tutor University Background */}
-              <div>
-                <label className="block text-sm font-bold text-slate-900 mb-2">
-                  Preferred Tutor University / Institution Background
-                </label>
-                <select
-                  value={preferredTutorUniversity}
-                  onChange={(e) => setPreferredTutorUniversity(e.target.value)}
-                  className="w-full h-11 rounded-xl border border-slate-200 bg-white px-3.5 text-xs font-semibold text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
-                >
-                  <option value="Any Reputed University">Any Reputed University (All Verified Tutors)</option>
-                  <option value="Public Universities (BUET, DU, Medical, JU, RU)">Public Universities (BUET, DU, Medical, JU, RU)</option>
-                  <option value="Engineering Specialist (BUET, CKRUET, MIST, IUT)">Engineering Specialist (BUET, CKRUET, MIST, IUT)</option>
-                  <option value="Medical Colleges (DMC, SSMC, ShSMC)">Medical Colleges (DMC, SSMC, ShSMC, etc.)</option>
-                  <option value="Top Private Universities (NSU, BRACU, AIUB, IUB)">Top Private Universities (NSU, BRACU, AIUB, IUB)</option>
-                  <option value="English Medium Background Tutors">English Medium Background Tutors (Scholastica, Sunbeams, Mastermind Alums)</option>
-                </select>
-              </div>
-
-              {/* Special Requirements */}
-              <div>
-                <label className="block text-sm font-bold text-slate-900 mb-2">
-                  Special Requirements / Preferred University or Notes
-                </label>
-                <textarea
-                  rows={2}
-                  value={otherRequirements}
-                  onChange={(e) => setOtherRequirements(e.target.value)}
-                  placeholder="e.g. Tutor must have proven teaching experience in these subjects..."
-                  className="w-full rounded-xl border border-slate-200 p-3.5 text-xs text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
-                />
-              </div>
-
-              {/* Contact Information (If guest or not logged in) */}
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-4">
-                <div className="flex items-center gap-2 text-xs font-bold text-slate-900 uppercase tracking-wider">
-                  <ShieldCheck className="h-4 w-4 text-[#00a65a]" />
-                  Guardian Contact & Verification
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                      Your Full Name <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={guardianName}
-                      onChange={(e) => setGuardianName(e.target.value)}
-                      placeholder="e.g. Nasreen Sultana"
-                      className="w-full h-10 rounded-lg border border-slate-300 bg-white px-3 text-xs text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                      11-Digit Mobile Number <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="tel"
-                      required
-                      value={guardianPhone}
-                      onChange={(e) => setGuardianPhone(e.target.value)}
-                      placeholder="e.g. 01711XXXXXX"
-                      disabled={!!currentUser}
-                      className="w-full h-10 rounded-lg border border-slate-300 bg-white px-3 text-xs text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1] disabled:bg-slate-100 disabled:text-slate-500"
-                    />
-                  </div>
-                  <div className="sm:col-span-2">
-                    <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                      Email Address (Optional - for invoices & confirmation letter)
-                    </label>
-                    <input
-                      type="email"
-                      value={guardianEmail}
-                      onChange={(e) => setGuardianEmail(e.target.value)}
-                      placeholder="e.g. guardian@example.com"
-                      className="w-full h-10 rounded-lg border border-slate-300 bg-white px-3 text-xs text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
-                    />
-                  </div>
-                </div>
-                {!currentUser && (
-                  <p className="text-[11px] text-slate-500">
-                    A free Guardian account will be created automatically for this number so you can track tutor applications and schedule free demo classes.
-                  </p>
                 )}
               </div>
 
-              {/* Terms Agreement Checkbox */}
-              <label className="flex items-start gap-2.5 cursor-pointer text-xs text-slate-600">
-                <input
-                  type="checkbox"
-                  checked={termsAgreed}
-                  onChange={(e) => setTermsAgreed(e.target.checked)}
-                  className="mt-0.5 h-4 w-4 rounded border-slate-300 text-[#0675c1] focus:ring-[#0675c1]"
-                />
-                <span>
-                  I agree to the{" "}
-                  <Link href="/terms-condition" className="text-[#0675c1] font-bold hover:underline">
-                    Terms & Conditions
-                  </Link>{" "}
-                  and acknowledge that TutorBari provides 100% verified tutors with a free replacement guarantee.
-                </span>
-              </label>
-
-              {/* Navigation Buttons */}
-              <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                <Button
-                  type="button"
-                  onClick={() => setStep(2)}
-                  variant="outline"
-                  className="h-12 px-6 font-bold text-sm gap-2"
-                >
-                  <ArrowLeft className="h-4 w-4" />
-                  Back
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={submitting}
-                  className="h-12 px-8 bg-[#00a65a] hover:bg-[#008f4c] text-white font-bold text-sm shadow-md shadow-[#00a65a]/20 gap-2"
-                >
-                  {submitting ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      Posting Tuition...
-                    </>
-                  ) : (
-                    <>
-                      <Send className="h-4 w-4" />
-                      Submit & Find Tutors
-                    </>
-                  )}
-                </Button>
+              {/* Slider Dots Indicator */}
+              <div className="flex items-center gap-2 mt-6">
+                {[0, 1, 2].map((idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setActiveSlide(idx)}
+                    className={`h-2.5 rounded-full transition-all ${
+                      activeSlide === idx ? "w-8 bg-[#0675c1]" : "w-2.5 bg-slate-300"
+                    }`}
+                    aria-label={`Slide ${idx + 1}`}
+                  />
+                ))}
               </div>
-            </form>
-          )}
+            </div>
+
+            {/* 3 Metric Pills */}
+            <div className="grid grid-cols-3 gap-4 text-center">
+              <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs">
+                <div className="text-xl sm:text-2xl font-black text-[#0675c1]">50,000+</div>
+                <div className="text-[11px] font-semibold text-slate-500 mt-1">Verified Tutors</div>
+              </div>
+              <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs">
+                <div className="text-xl sm:text-2xl font-black text-[#00a65a]">98.4%</div>
+                <div className="text-[11px] font-semibold text-slate-500 mt-1">Parent Satisfaction</div>
+              </div>
+              <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs">
+                <div className="text-xl sm:text-2xl font-black text-slate-900">৳0</div>
+                <div className="text-[11px] font-semibold text-slate-500 mt-1">Parent Fee</div>
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT COLUMN: The Exact Caretutors Form Card */}
+          <div className="w-full lg:w-1/2">
+            <div className="rounded-2xl border border-[rgba(6,53,85,0.16)] bg-white p-6 sm:p-10 shadow-sm text-left">
+              {/* Caretutors Header */}
+              <div className="mb-6">
+                <h1 className="text-3xl sm:text-4xl font-bold text-[#0675c1]">
+                  Need Tutor?
+                </h1>
+                <p className="text-base sm:text-lg text-slate-600 mt-1 font-medium">
+                  {phase === 1 ? "Please give us your number" : "Please give us your details"}
+                </p>
+              </div>
+
+              {/* Error Message */}
+              {errorMessage && (
+                <div className="mb-6 rounded-xl bg-red-50 p-3.5 border border-red-200 flex items-start gap-2.5 text-xs text-red-700">
+                  <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+                  <span>{errorMessage}</span>
+                </div>
+              )}
+
+              {/* PHASE 1: Caretutors Phone Input */}
+              {phase === 1 && (
+                <form onSubmit={handlePhoneSubmit} className="space-y-6">
+                  <div>
+                    <label className="block text-sm font-bold text-slate-800 mb-2">
+                      Phone Number <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="tel"
+                        required
+                        autoFocus
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
+                        placeholder="E.g: 01756441122"
+                        className="w-full border-b border-black/40 py-2.5 text-base text-slate-900 focus:border-b-2 focus:border-[#0675c1] focus:outline-none transition-all placeholder:text-slate-400 font-medium"
+                      />
+                      <Phone className="absolute right-2 top-3 h-4 w-4 text-slate-400" />
+                    </div>
+                    <p className="text-xs text-slate-500 mt-2">
+                      Enter your 11-digit mobile number to connect with qualified tutors in your area.
+                    </p>
+                  </div>
+
+                  <div className="pt-2">
+                    <Button
+                      type="submit"
+                      disabled={loading}
+                      className="group flex w-fit items-center justify-between gap-4 h-12 px-8 bg-[#0675c1] hover:bg-[#125a9c] text-white font-bold text-sm rounded-xl shadow-md shadow-[#0675c1]/20 transition-all"
+                    >
+                      {loading ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          Processing...
+                        </>
+                      ) : (
+                        <>
+                          Continue
+                          <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </form>
+              )}
+
+              {/* PHASE 2: Caretutors Details Form */}
+              {phase === 2 && (
+                <form onSubmit={handleFinalSubmit} className="space-y-6 animate-in fade-in duration-200">
+                  {/* Name */}
+                  <div>
+                    <label className="block text-sm font-bold text-slate-800 mb-1.5">
+                      Name <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="E.g: Rafsan Chowdhury"
+                      className="w-full border-b border-black/40 py-2 text-sm text-slate-900 focus:border-b-2 focus:border-[#0675c1] focus:outline-none placeholder:text-slate-400 font-medium"
+                    />
+                  </div>
+
+                  {/* Address */}
+                  <div>
+                    <label className="block text-sm font-bold text-slate-800 mb-1.5">
+                      Address <span className="text-red-500">*</span>
+                    </label>
+                    <textarea
+                      rows={2}
+                      required
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      placeholder="E.g: House: 14, Road: 7/A, Sector: 4, Dhanmondi, Dhaka"
+                      className="w-full border-b border-black/40 py-2 text-sm text-slate-900 focus:border-b-2 focus:border-[#0675c1] focus:outline-none placeholder:text-slate-400 font-medium"
+                    />
+                  </div>
+
+                  {/* City & Location Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-800 mb-1.5">
+                        City <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                        className="w-full h-10 rounded-lg border border-slate-300 bg-white px-3 text-xs text-slate-900 focus:border-[#0675c1] focus:outline-none font-semibold"
+                      >
+                        {cities.map((c) => (
+                          <option key={c} value={c}>
+                            {c}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-800 mb-1.5">
+                        Area / Thana <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                        className="w-full h-10 rounded-lg border border-slate-300 bg-white px-3 text-xs text-slate-900 focus:border-[#0675c1] focus:outline-none font-semibold"
+                      >
+                        {popularLocations.map((loc) => (
+                          <option key={loc} value={loc}>
+                            {loc}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Category & Class */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-800 mb-1.5">
+                        Medium / Category <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                        className="w-full h-10 rounded-lg border border-slate-300 bg-white px-3 text-xs text-slate-900 focus:border-[#0675c1] focus:outline-none font-semibold"
+                      >
+                        {categories.map((cat) => (
+                          <option key={cat} value={cat}>
+                            {cat}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-800 mb-1.5">
+                        Class / Level <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={className}
+                        onChange={(e) => setClassName(e.target.value)}
+                        placeholder="e.g. Class 8 / O Level / SSC"
+                        className="w-full h-10 rounded-lg border border-slate-300 bg-white px-3 text-xs text-slate-900 focus:border-[#0675c1] focus:outline-none font-semibold"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Subjects & Salary */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-800 mb-1.5">
+                        Subjects Needed <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={subjects}
+                        onChange={(e) => setSubjects(e.target.value)}
+                        placeholder="e.g. Mathematics, English, Physics"
+                        className="w-full h-10 rounded-lg border border-slate-300 bg-white px-3 text-xs text-slate-900 focus:border-[#0675c1] focus:outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-800 mb-1.5">
+                        Monthly Salary (BDT) <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={salary}
+                        onChange={(e) => setSalary(e.target.value)}
+                        placeholder="e.g. 8,000"
+                        className="w-full h-10 rounded-lg border border-slate-300 bg-white px-3 text-xs text-slate-900 focus:border-[#0675c1] focus:outline-none font-bold"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Description (Caretutors textarea) */}
+                  <div>
+                    <label className="block text-sm font-bold text-slate-800 mb-1.5">
+                      Description / Specific Needs
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      placeholder="E.g: English medium tutor is needed for 8th grade student. Tutor must be from BUET or Dhaka University."
+                      className="w-full border-b border-black/40 py-2 text-sm text-slate-900 focus:border-b-2 focus:border-[#0675c1] focus:outline-none placeholder:text-slate-400 font-medium"
+                    />
+                  </div>
+
+                  {/* Terms & Conditions */}
+                  <label className="flex items-start gap-2.5 cursor-pointer text-xs text-slate-600">
+                    <input
+                      type="checkbox"
+                      checked={termsAgreed}
+                      onChange={(e) => setTermsAgreed(e.target.checked)}
+                      className="mt-0.5 h-4 w-4 rounded border-slate-300 text-[#0675c1] focus:ring-[#0675c1]"
+                    />
+                    <span>
+                      I agree to the{" "}
+                      <Link href="/terms-condition" className="text-[#0675c1] font-bold hover:underline">
+                        Terms of Use and Privacy Policy
+                      </Link>
+                    </span>
+                  </label>
+
+                  {/* Action Buttons */}
+                  <div className="pt-2 flex items-center justify-between">
+                    <button
+                      type="button"
+                      onClick={() => setPhase(1)}
+                      className="text-xs font-bold text-slate-500 hover:text-slate-800"
+                    >
+                      ← Change Phone
+                    </button>
+
+                    <Button
+                      type="submit"
+                      disabled={loading}
+                      className="group flex w-fit items-center justify-between gap-4 h-12 px-8 bg-[#0675c1] hover:bg-[#125a9c] text-white font-bold text-sm rounded-xl shadow-md shadow-[#0675c1]/20 transition-all"
+                    >
+                      {loading ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          Submitting Request...
+                        </>
+                      ) : (
+                        <>
+                          Continue
+                          <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </form>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

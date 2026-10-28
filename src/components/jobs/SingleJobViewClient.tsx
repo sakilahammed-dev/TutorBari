@@ -426,15 +426,28 @@ export function SingleJobViewClient({ jobId, initialJob }: SingleJobViewClientPr
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
           <div className="w-full max-w-lg rounded-2xl bg-white p-6 sm:p-8 shadow-2xl border border-slate-200 space-y-5">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <h3 className="text-lg font-bold text-slate-900">
+              <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                <CheckCircle2 className="h-5 w-5 text-[#0675c1]" />
                 Apply for Tuition Job #{job.id}
               </h3>
               <button
                 onClick={() => setShowApplyModal(false)}
-                className="text-slate-400 hover:text-slate-600 p-1"
+                className="text-slate-400 hover:text-slate-600 p-1 font-bold text-lg"
               >
                 ✕
               </button>
+            </div>
+
+            {/* Caretutors Confirmation Question */}
+            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+              <p className="text-sm font-semibold text-slate-800 text-center">
+                Are you sure to apply for this tuition job?
+              </p>
+              {job.preferredTutorGender && job.preferredTutorGender !== "Any" && currentUser?.gender && currentUser.gender !== job.preferredTutorGender && (
+                <p className="mt-1.5 text-xs text-red-600 text-center font-bold">
+                  Note: This tuition requires a &quot;{job.preferredTutorGender}&quot; tutor.
+                </p>
+              )}
             </div>
 
             {applyError && (
@@ -444,9 +457,12 @@ export function SingleJobViewClient({ jobId, initialJob }: SingleJobViewClientPr
             )}
 
             {applySuccess && (
-              <div className="rounded-lg bg-emerald-50 p-3 text-xs text-emerald-800 border border-emerald-200 flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-[#00a65a]" />
-                <span>Application submitted successfully!</span>
+              <div className="rounded-xl bg-emerald-50 p-4 border border-emerald-200 text-center space-y-2">
+                <CheckCircle2 className="h-8 w-8 text-[#00a65a] mx-auto" />
+                <h4 className="text-base font-bold text-[#0675c1]">Successfully Applied!</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  <strong>Note:</strong> Guardian will review your profile &amp; shortlist you if your profile strongly matches with their requirements.
+                </p>
               </div>
             )}
 
@@ -552,15 +568,16 @@ export function SingleJobViewClient({ jobId, initialJob }: SingleJobViewClientPr
                   variant="outline"
                   onClick={() => setShowApplyModal(false)}
                   disabled={applying}
+                  className="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-6"
                 >
-                  Cancel
+                  No
                 </Button>
                 <Button
                   type="submit"
                   disabled={applying || applySuccess}
-                  className="bg-[#0675c1] hover:bg-[#125a9c] text-white font-bold"
+                  className="bg-[#0675c1] hover:bg-[#125a9c] text-white font-bold px-8"
                 >
-                  {applying ? "Submitting..." : "Submit Application"}
+                  {applying ? "Applying..." : "Yes"}
                 </Button>
               </div>
             </form>

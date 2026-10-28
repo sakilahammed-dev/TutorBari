@@ -10,6 +10,9 @@ const RegisterSchema = z.object({
   phone: z.string().regex(/^01[3-9]\d{8}$/, "Please enter a valid 11-digit Bangladeshi mobile number"),
   email: z.string().email("Invalid email address").optional().or(z.literal("")),
   password: z.string().min(6, "Password must be at least 6 characters"),
+  gender: z.enum(["Male", "Female", "Other"]).optional(),
+  city: z.string().optional(),
+  location: z.string().optional(),
   role: z.enum(["GUARDIAN", "TUTOR"]).default("GUARDIAN"),
 });
 
@@ -39,7 +42,7 @@ export async function POST(req: NextRequest) {
 
     const rawName = result.data.name;
     const name = sanitizeInput(rawName);
-    const { phone, email, password, role } = result.data;
+    const { phone, email, password, role, gender, city, location } = result.data;
 
     // Check duplicate phone
     const existingPhone = DB.findUserByPhone(phone);
@@ -83,7 +86,9 @@ export async function POST(req: NextRequest) {
         name,
         phone,
         email: email || undefined,
-        gender: "Male",
+        gender: (gender as any) || "Male",
+        preferredCities: city ? [city] : ["Dhaka"],
+        preferredLocations: location ? [location] : ["Dhanmondi"],
         rating: 5.0,
         totalReviews: 0,
         tuitionsCompleted: 0,
@@ -95,8 +100,9 @@ export async function POST(req: NextRequest) {
       DB.createGuardianProfile({
         id: `grd_${Date.now()}`,
         userId,
-        city: "Dhaka",
-        location: "Dhaka",
+        gender: (gender as any) || "Male",
+        city: city || "Dhaka",
+        location: location || "Dhanmondi",
       });
     }
 

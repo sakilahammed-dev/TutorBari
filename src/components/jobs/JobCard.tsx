@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin, Calendar, Users, Clock, DollarSign, BookOpen, ArrowRight, CheckCircle2 } from "lucide-react";
+import { MapPin, Calendar, Users, Clock, DollarSign, BookOpen, ArrowRight, CheckCircle2, Share2, Check } from "lucide-react";
 import { JobPost } from "@/lib/types";
 import { Button } from "@/components/ui/Button";
 
@@ -10,6 +10,19 @@ interface JobCardProps {
 }
 
 export function JobCard({ job }: JobCardProps) {
+  const [copied, setCopied] = useState(false);
+
+  const handleShare = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const url = typeof window !== "undefined" ? `${window.location.origin}/job/view/${job.id}` : `/job/view/${job.id}`;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
   // Category icon mapping
   const getCategoryIcon = (cat: string) => {
     if (cat.includes("Bangla")) return "/categories/Bangla.png";
@@ -108,9 +121,28 @@ export function JobCard({ job }: JobCardProps) {
             </span>
           ) : null}
 
+          <button
+            type="button"
+            onClick={handleShare}
+            title="Share Job"
+            className="inline-flex items-center justify-center h-9 px-3 rounded-lg border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-100 transition-colors"
+          >
+            {copied ? (
+              <>
+                <Check className="h-3.5 w-3.5 mr-1 text-emerald-600" />
+                Copied
+              </>
+            ) : (
+              <>
+                <Share2 className="h-3.5 w-3.5 mr-1" />
+                Share
+              </>
+            )}
+          </button>
+
           <Link href={`/job/view/${job.id}`}>
             <Button size="sm" variant="outline" className="h-9 px-4 text-xs font-bold gap-1 border-slate-300 hover:border-[#0675c1] hover:text-[#0675c1]">
-              View Details
+              Details
               <ArrowRight className="h-3.5 w-3.5" />
             </Button>
           </Link>

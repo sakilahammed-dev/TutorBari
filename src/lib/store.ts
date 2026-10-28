@@ -510,7 +510,10 @@ const db = global.__TB_DATABASE__;
 
 export const DB = {
   // Users
-  findUserByPhone: (phone: string) => db.users.find((u) => u.phone === phone),
+  findUserByPhone: (phone: string) => {
+    const clean = phone.replace(/[^0-9]/g, "");
+    return db.users.find((u) => u.phone.replace(/[^0-9]/g, "") === clean);
+  },
   findUserByEmail: (email: string) => db.users.find((u) => u.email === email),
   findUserById: (id: string) => db.users.find((u) => u.id === id),
   createUser: (user: User & { passwordHash: string }) => {
@@ -577,9 +580,27 @@ export const DB = {
     db.guardians.push(profile);
     return profile;
   },
+  updateGuardianProfile: (guardianId: string, updates: Partial<GuardianProfile>) => {
+    const guardian = db.guardians.find((g) => g.id === guardianId || g.userId === guardianId);
+    if (!guardian) return null;
+    Object.assign(guardian, updates);
+    return guardian;
+  },
 
   // Jobs
   getJobsByGuardianId: (guardianId: string) => db.jobs.filter((j) => j.guardianId === guardianId),
+  updateJob: (jobId: number, updates: Partial<JobPost>) => {
+    const job = db.jobs.find((j) => j.id === jobId);
+    if (!job) return null;
+    Object.assign(job, updates);
+    return job;
+  },
+  incrementJobViews: (jobId: number) => {
+    const job = db.jobs.find((j) => j.id === jobId);
+    if (!job) return 0;
+    job.views = (job.views || 0) + 1;
+    return job.views;
+  },
   updateJobStatus: (jobId: number, status: JobStatus) => {
     const job = db.jobs.find((j) => j.id === jobId);
     if (!job) return null;
@@ -652,6 +673,16 @@ export const DB = {
   getApplicationsByJobId: (jobId: number) => db.applications.filter((a) => a.jobId === jobId),
   getApplicationsByTutorId: (tutorId: string) => db.applications.filter((a) => a.tutorId === tutorId),
   getApplicationById: (id: string) => db.applications.find((a) => a.id === id),
+  undoApplication: (jobId: number, tutorId: string) => {
+    const idx = db.applications.findIndex((a) => a.jobId === jobId && a.tutorId === tutorId);
+    if (idx === -1) return false;
+    db.applications.splice(idx, 1);
+    const job = db.jobs.find((j) => j.id === jobId);
+    if (job && job.applicantsCount > 0) {
+      job.applicantsCount -= 1;
+    }
+    return true;
+  },
   updateApplicationStatus: (
     applicationId: string,
     status: ApplicationStatus,

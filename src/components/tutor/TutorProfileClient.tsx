@@ -46,6 +46,12 @@ export function TutorProfileClient() {
   const [bloodGroup, setBloodGroup] = useState("");
   const [religion, setReligion] = useState("Islam");
   const [emergencyContact, setEmergencyContact] = useState("");
+  const [emergencyName, setEmergencyName] = useState("");
+  const [emergencyContactNumber, setEmergencyContactNumber] = useState("");
+  const [emergencyRelation, setEmergencyRelation] = useState("Father");
+  const [emergencyAddress, setEmergencyAddress] = useState("");
+  const [facebook, setFacebook] = useState("");
+  const [hearAboutUs, setHearAboutUs] = useState("Facebook");
   const [presentAddress, setPresentAddress] = useState("");
   const [permanentAddress, setPermanentAddress] = useState("");
 
@@ -194,6 +200,12 @@ export function TutorProfileClient() {
           setBloodGroup(p.bloodGroup || "B+");
           setReligion(p.religion || "Islam");
           setEmergencyContact(p.emergencyContact || "01811000000");
+          setEmergencyName(p.emergencyName || "");
+          setEmergencyContactNumber(p.emergencyContactNumber || p.emergencyContact || "01811000000");
+          setEmergencyRelation(p.emergencyRelation || "Father");
+          setEmergencyAddress(p.emergencyAddress || "");
+          setFacebook(p.facebook || "");
+          setHearAboutUs(p.hearAboutUs || "Facebook");
           setPresentAddress(p.presentAddress || "Dhanmondi, Dhaka");
           setPermanentAddress(p.permanentAddress || "Dhaka, Bangladesh");
 
@@ -237,7 +249,13 @@ export function TutorProfileClient() {
           dateOfBirth,
           bloodGroup,
           religion,
-          emergencyContact,
+          emergencyContact: emergencyContactNumber || emergencyContact,
+          emergencyName,
+          emergencyContactNumber,
+          emergencyRelation,
+          emergencyAddress,
+          facebook,
+          hearAboutUs,
           presentAddress,
           permanentAddress,
         }),
@@ -601,39 +619,7 @@ export function TutorProfileClient() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">Emergency Contact</label>
-                  <input
-                    type="tel"
-                    value={emergencyContact}
-                    onChange={(e) => setEmergencyContact(e.target.value)}
-                    placeholder="017XXXXXXXX"
-                    className="w-full h-11 rounded-xl border border-slate-200 px-3.5 text-xs text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    Tutoring Experience <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    value={tutoringExperience}
-                    onChange={(e) => setTutoringExperience(e.target.value)}
-                    className="w-full h-11 rounded-xl border border-slate-200 bg-white px-3 text-xs text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
-                  >
-                    <option value="Fresh / Less than 1 Year">Fresh / Less than 1 Year</option>
-                    <option value="1 - 2 Years">1 - 2 Years</option>
-                    <option value="2 - 3 Years">2 - 3 Years</option>
-                    <option value="3 - 5 Years">3 - 5 Years</option>
-                    <option value="5+ Years">5+ Years Experience</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    Religion
-                  </label>
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">Religion</label>
                   <select
                     value={religion}
                     onChange={(e) => setReligion(e.target.value)}
@@ -649,14 +635,143 @@ export function TutorProfileClient() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">Present Address</label>
-                <input
-                  type="text"
-                  value={presentAddress}
-                  onChange={(e) => setPresentAddress(e.target.value)}
-                  placeholder="e.g. House 14, Road 5, Dhanmondi, Dhaka"
-                  className="w-full h-11 rounded-xl border border-slate-200 px-3.5 text-xs text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
-                />
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  Tutoring Experience <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={tutoringExperience}
+                  onChange={(e) => setTutoringExperience(e.target.value)}
+                  className="w-full h-11 rounded-xl border border-slate-200 bg-white px-3 text-xs text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
+                >
+                  <option value="Fresh / Less than 1 Year">Fresh / Less than 1 Year</option>
+                  <option value="1 - 2 Years">1 - 2 Years</option>
+                  <option value="2 - 3 Years">2 - 3 Years</option>
+                  <option value="3 - 5 Years">3 - 5 Years</option>
+                  <option value="5+ Years">5+ Years Experience</option>
+                </select>
+              </div>
+
+              {/* Emergency Contact Information (Caretutors Exact Structure) */}
+              <div className="pt-4 border-t border-slate-100">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 mb-1">
+                  Emergency Contact Details
+                </h3>
+                <p className="text-[11px] text-slate-500 mb-3">
+                  Please provide details of a parent, guardian, or immediate relative for urgent communication.
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1.5">Emergency Contact Name</label>
+                    <input
+                      type="text"
+                      value={emergencyName}
+                      onChange={(e) => setEmergencyName(e.target.value)}
+                      placeholder="e.g. Md. Hossain"
+                      className="w-full h-11 rounded-xl border border-slate-200 px-3.5 text-xs text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1.5">Emergency Phone Number</label>
+                    <input
+                      type="tel"
+                      value={emergencyContactNumber}
+                      onChange={(e) => {
+                        setEmergencyContactNumber(e.target.value);
+                        setEmergencyContact(e.target.value);
+                      }}
+                      placeholder="018XXXXXXXX"
+                      className="w-full h-11 rounded-xl border border-slate-200 px-3.5 text-xs text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1.5">Relationship</label>
+                    <select
+                      value={emergencyRelation}
+                      onChange={(e) => setEmergencyRelation(e.target.value)}
+                      className="w-full h-11 rounded-xl border border-slate-200 bg-white px-3 text-xs text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
+                    >
+                      {["Father", "Mother", "Brother", "Sister", "Spouse", "Uncle", "Aunt", "Relative", "Friend"].map((r) => (
+                        <option key={r} value={r}>
+                          {r}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">Emergency Address</label>
+                  <input
+                    type="text"
+                    value={emergencyAddress}
+                    onChange={(e) => setEmergencyAddress(e.target.value)}
+                    placeholder="e.g. Dhaka, Bangladesh"
+                    className="w-full h-11 rounded-xl border border-slate-200 px-3.5 text-xs text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
+                  />
+                </div>
+              </div>
+
+              {/* Addresses */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">Present Address</label>
+                  <input
+                    type="text"
+                    value={presentAddress}
+                    onChange={(e) => setPresentAddress(e.target.value)}
+                    placeholder="e.g. House 14, Road 5, Dhanmondi, Dhaka"
+                    className="w-full h-11 rounded-xl border border-slate-200 px-3.5 text-xs text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">Permanent Address</label>
+                  <input
+                    type="text"
+                    value={permanentAddress}
+                    onChange={(e) => setPermanentAddress(e.target.value)}
+                    placeholder="e.g. Village/Town, Upazila, District"
+                    className="w-full h-11 rounded-xl border border-slate-200 px-3.5 text-xs text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
+                  />
+                </div>
+              </div>
+
+              {/* Social & Referral */}
+              <div className="pt-4 border-t border-slate-100">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 mb-3">
+                  Social Profile & Referral
+                </h3>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1.5">Facebook Profile Link</label>
+                    <input
+                      type="url"
+                      value={facebook}
+                      onChange={(e) => setFacebook(e.target.value)}
+                      placeholder="https://facebook.com/username"
+                      className="w-full h-11 rounded-xl border border-slate-200 px-3.5 text-xs text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1.5">How did you hear about us?</label>
+                    <select
+                      value={hearAboutUs}
+                      onChange={(e) => setHearAboutUs(e.target.value)}
+                      className="w-full h-11 rounded-xl border border-slate-200 bg-white px-3 text-xs text-slate-900 focus:border-[#0675c1] focus:ring-1 focus:ring-[#0675c1]"
+                    >
+                      {["Facebook", "Google Search", "Friends & Family", "University Campus", "Newspaper / Advertisement", "YouTube", "LinkedIn"].map((h) => (
+                        <option key={h} value={h}>
+                          {h}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
               </div>
 
               <div>

@@ -34,11 +34,22 @@ export interface User {
 export interface GuardianProfile {
   id: string;
   userId: string;
+  name?: string;
   gender?: Gender;
+  phone?: string;
+  email?: string;
   emergencyPhone?: string;
   city: string;
   location: string;
   detailedAddress?: string;
+  profession?: string;
+  emergencyName?: string;
+  emergencyContactNumber?: string;
+  emergencyRelation?: string;
+  emergencyAddress?: string;
+  facebook?: string;
+  hearAboutUs?: string;
+  profilePhoto?: string;
   notes?: string;
 }
 
@@ -76,6 +87,14 @@ export interface TutorProfile {
   bloodGroup?: string;
   religion?: string;
   emergencyContact?: string;
+  emergencyName?: string;
+  emergencyContactNumber?: string;
+  emergencyRelation?: string;
+  emergencyAddress?: string;
+  facebook?: string;
+  hearAboutUs?: string;
+  profilePercentage?: number;
+  totalCvView?: number;
   presentAddress?: string;
   permanentAddress?: string;
   institution?: string;
@@ -126,6 +145,8 @@ export interface JobPost {
   postedDate: string;
   applicantsCount: number;
   applied?: boolean;
+  views?: number;
+  totalApplied?: number;
 }
 
 export interface JobApplication {

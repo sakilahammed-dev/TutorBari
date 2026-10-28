@@ -1,10 +1,11 @@
 "use client";
 
 import React from "react";
-import { Filter, RotateCcw, MapPin, BookOpen, Layers, Users } from "lucide-react";
+import { Filter, RotateCcw, MapPin, BookOpen, Layers, Users, Search } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 interface Filters {
+  jobId: string;
   city: string;
   location: string;
   category: string;
@@ -72,6 +73,21 @@ export function JobFilterSidebar({ filters, onChange, onReset }: JobFilterSideba
           <RotateCcw className="h-3 w-3" />
           Reset
         </button>
+      </div>
+
+      {/* Job ID Search (Caretutors Match) */}
+      <div>
+        <label className="text-xs font-bold text-slate-700 block mb-1.5 flex items-center gap-1.5">
+          <Search className="h-3.5 w-3.5 text-[#0675c1]" />
+          Search by Job ID
+        </label>
+        <input
+          type="number"
+          placeholder="e.g. 243138"
+          value={filters.jobId || ""}
+          onChange={(e) => handleChange("jobId", e.target.value)}
+          className="h-10 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 text-xs text-slate-800 focus:border-[#0675c1] focus:outline-none"
+        />
       </div>
 
       {/* City Filter */}

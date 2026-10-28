@@ -12,6 +12,7 @@ export default function JobListPage() {
   const [jobs, setJobs] = useState<JobPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
+    jobId: "",
     city: "All",
     location: "All",
     category: "All",
@@ -32,7 +33,11 @@ export default function JobListPage() {
       const res = await fetch(`/api/jobs?${params.toString()}`);
       const data = await res.json();
       if (data.success) {
-        setJobs(data.jobs);
+        let list: JobPost[] = data.jobs;
+        if (filters.jobId && filters.jobId.trim() !== "") {
+          list = list.filter((j) => String(j.id).includes(filters.jobId.trim()));
+        }
+        setJobs(list);
       }
     } catch (err) {
       console.error("Failed to fetch jobs:", err);
@@ -48,6 +53,7 @@ export default function JobListPage() {
 
   const handleReset = () => {
     setFilters({
+      jobId: "",
       city: "All",
       location: "All",
       category: "All",

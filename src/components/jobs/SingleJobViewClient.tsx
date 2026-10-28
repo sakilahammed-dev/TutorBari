@@ -37,6 +37,9 @@ export function SingleJobViewClient({ jobId, initialJob }: SingleJobViewClientPr
   const [applying, setApplying] = useState(false);
   const [applyError, setApplyError] = useState<string | null>(null);
   const [applySuccess, setApplySuccess] = useState(false);
+  const [undoing, setUndoing] = useState(false);
+  const [showIncompleteModal, setShowIncompleteModal] = useState(false);
+  const [incompleteMsg, setIncompleteMsg] = useState("");
 
   useEffect(() => {
     // 1. Fetch current user session
@@ -88,6 +91,12 @@ export function SingleJobViewClient({ jobId, initialJob }: SingleJobViewClientPr
 
       const data = await res.json();
       if (!res.ok) {
+        if (data.code === "CARE94") {
+          setShowApplyModal(false);
+          setIncompleteMsg(data.message || "Please complete your profile to apply for this tuition.");
+          setShowIncompleteModal(true);
+          return;
+        }
         setApplyError(data.message || "Failed to submit application");
         setApplying(false);
         return;
@@ -105,6 +114,27 @@ export function SingleJobViewClient({ jobId, initialJob }: SingleJobViewClientPr
       setApplyError("An unexpected error occurred. Please try again.");
     } finally {
       setApplying(false);
+    }
+  };
+
+  const handleUndoApply = async () => {
+    if (!confirm("Are you sure you want to withdraw your application for this tuition job?")) return;
+    setUndoing(true);
+    try {
+      const res = await fetch(`/api/jobs/${jobId}/apply`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        if (job) {
+          setJob({ ...job, applied: false, applicantsCount: Math.max(0, job.applicantsCount - 1) });
+        }
+      } else {
+        alert("Could not withdraw application.");
+      }
+    } catch {
+      alert("Network error occurred.");
+    } finally {
+      setUndoing(false);
     }
   };
 
@@ -357,7 +387,7 @@ export function SingleJobViewClient({ jobId, initialJob }: SingleJobViewClientPr
               {/* Apply Button State */}
               <div>
                 {job.applied ? (
-                  <div className="rounded-xl bg-emerald-50 p-4 border border-emerald-200 text-center space-y-1.5">
+                  <div className="rounded-xl bg-emerald-50 p-4 border border-emerald-200 text-center space-y-2">
                     <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-emerald-800">
                       <CheckCircle2 className="h-4 w-4 text-[#00a65a]" />
                       You Have Applied for this Job!
@@ -365,6 +395,14 @@ export function SingleJobViewClient({ jobId, initialJob }: SingleJobViewClientPr
                     <p className="text-[11px] text-emerald-700 leading-tight">
                       Your CV has been delivered to the guardian. You will be notified via SMS/call if shortlisted.
                     </p>
+                    <button
+                      type="button"
+                      disabled={undoing}
+                      onClick={handleUndoApply}
+                      className="mt-1 text-xs text-red-600 hover:text-red-700 underline font-semibold disabled:opacity-50"
+                    >
+                      {undoing ? "Withdrawing application..." : "Undo Application"}
+                    </button>
                   </div>
                 ) : currentUser?.role === "TUTOR" ? (
                   <Button
@@ -581,6 +619,27 @@ export function SingleJobViewClient({ jobId, initialJob }: SingleJobViewClientPr
                 </Button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Incomplete Profile Modal (Caretutors Exact Structure) */}
+      {showIncompleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl text-center space-y-4">
+            <AlertCircle className="h-12 w-12 text-red-500 mx-auto" />
+            <h3 className="text-lg font-bold text-red-500">Incomplete Profile</h3>
+            <p className="text-xs text-slate-600">{incompleteMsg.split("Note:")[0]?.trim()}</p>
+            {incompleteMsg.includes("Note:") && (
+              <p className="text-xs text-red-500 font-medium">Note: {incompleteMsg.split("Note:")[1]?.trim()}</p>
+            )}
+            <div className="flex justify-end pt-2">
+              <Link href="/tutor/profile/info">
+                <Button className="border border-[#0675c1] bg-transparent text-[#0675c1] hover:bg-[#0675c1]/10 text-xs font-bold h-9 px-5">
+                  Update Profile
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       )}

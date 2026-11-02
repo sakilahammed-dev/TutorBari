@@ -78,7 +78,7 @@ export default function HomePage() {
     { title: "Special Skill", subtitle: "Handwriting, Chess & Debate", icon: "/categories/Special_Skill.png" },
     { title: "Uni Help", subtitle: "University Courses & Engineering", icon: "/categories/Uni_help.png" },
     { title: "Madrasa Medium", subtitle: "Dakhil, Alim & Hafizia", icon: "/categories/Madrasa.png" },
-    { title: "Special Child Education", subtitle: "Autism, ADHD & Special Care", icon: "/categories/Special _Child.png" },
+    { title: "Special Child Education", subtitle: "Autism, ADHD & Special Care", icon: "/categories/Special_Child.png" },
   ];
 
   const guardianSteps = [
@@ -86,18 +86,21 @@ export default function HomePage() {
       step: "01",
       title: "Submit Requirement",
       desc: "Submit your needs in details so qualified and verified tutors can apply for your post.",
+      image: "/categories/guardianSep1.png",
       icon: FileCheck,
     },
     {
       step: "02",
       title: "Shortlist Tutors",
       desc: "Review the applied list and shortlist up to 5 verified tutors based on CV, rating, and university.",
+      image: "/categories/guardianSep2.png",
       icon: Users,
     },
     {
       step: "03",
       title: "Confirm Hiring",
       desc: "Conduct 1-2 free trial classes, finalize your chosen tutor, and receive the digital confirmation letter.",
+      image: "/categories/guardianSep.png",
       icon: Award,
     },
   ];
@@ -107,18 +110,21 @@ export default function HomePage() {
       step: "01",
       title: "Complete Profile",
       desc: "Sign up as a tutor, fill out your educational qualifications, and upload your NID & Student ID.",
+      image: "/categories/Tutor-01.png",
       icon: GraduationCap,
     },
     {
       step: "02",
       title: "Apply Smartly",
       desc: "Browse our live job board and apply to tuition jobs matching your preferred class, location, and salary.",
+      image: "/categories/001.png",
       icon: CheckCircle2,
     },
     {
       step: "03",
       title: "Get Hired",
       desc: "Connect directly with shortlisted guardians, conduct trial classes, and start tutoring.",
+      image: "/categories/002.png",
       icon: ShieldCheck,
     },
   ];
@@ -371,15 +377,26 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {guardianSteps.map((step, idx) => (
-              <div key={idx} className="relative rounded-2xl border border-slate-200 p-6 bg-slate-50/50">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#0675c1] text-white font-bold">
-                    <step.icon className="h-6 w-6" />
+              <div key={idx} className="relative rounded-2xl border border-slate-200 p-6 bg-slate-50/50 hover:bg-white hover:border-[#0675c1]/50 hover:shadow-lg transition-all flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-4xl font-black text-[#0675c1]/20">{step.step}</span>
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#0675c1] text-white font-bold shadow-sm">
+                      <step.icon className="h-5 w-5" />
+                    </div>
                   </div>
-                  <span className="text-3xl font-black text-slate-200">{step.step}</span>
+                  <div className="flex justify-center my-3 h-36">
+                    <Image
+                      src={step.image}
+                      alt={step.title}
+                      width={140}
+                      height={140}
+                      className="object-contain"
+                    />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">{step.title}</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed">{step.desc}</p>
                 </div>
-                <h3 className="text-lg font-bold text-slate-900 mb-2">{step.title}</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">{step.desc}</p>
               </div>
             ))}
           </div>
@@ -501,15 +518,26 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {tutorSteps.map((step, idx) => (
-              <div key={idx} className="relative rounded-2xl border border-slate-200 p-6 bg-slate-50/50">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#00a65a] text-white font-bold">
-                    <step.icon className="h-6 w-6" />
+              <div key={idx} className="relative rounded-2xl border border-slate-200 p-6 bg-slate-50/50 hover:bg-white hover:border-[#00a65a]/50 hover:shadow-lg transition-all flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-4xl font-black text-[#00a65a]/20">{step.step}</span>
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#00a65a] text-white font-bold shadow-sm">
+                      <step.icon className="h-5 w-5" />
+                    </div>
                   </div>
-                  <span className="text-3xl font-black text-slate-200">{step.step}</span>
+                  <div className="flex justify-center my-3 h-36">
+                    <Image
+                      src={step.image}
+                      alt={step.title}
+                      width={140}
+                      height={140}
+                      className="object-contain"
+                    />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">{step.title}</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed">{step.desc}</p>
                 </div>
-                <h3 className="text-lg font-bold text-slate-900 mb-2">{step.title}</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">{step.desc}</p>
               </div>
             ))}
           </div>

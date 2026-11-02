@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   GraduationCap,
@@ -231,12 +232,21 @@ export default function HireATutorPage() {
           <div className="w-full lg:w-1/2 space-y-8">
             <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0675c1]/5 to-emerald-50/50 p-8 sm:p-10 border border-slate-200">
               {/* Slider Content */}
-              <div className="min-h-[220px] flex flex-col justify-center">
+              <div className="min-h-[260px] flex flex-col justify-center">
                 {activeSlide === 0 && (
                   <div className="space-y-4 animate-in fade-in duration-300">
-                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold bg-[#0675c1]/10 text-[#0675c1]">
-                      <Sparkles className="h-4 w-4" />
-                      Bangladesh&apos;s Most Trusted Tutor Platform
+                    <div className="flex items-center justify-between">
+                      <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold bg-[#0675c1]/10 text-[#0675c1]">
+                        <Sparkles className="h-4 w-4" />
+                        Bangladesh&apos;s Most Trusted Tutor Platform
+                      </div>
+                      <Image
+                        src="/categories/001.png"
+                        alt="Hire Tutors"
+                        width={90}
+                        height={90}
+                        className="object-contain"
+                      />
                     </div>
                     <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight">
                       Hire Verified Tutors from BUET, Medical &amp; DU in 30 Minutes
@@ -249,9 +259,18 @@ export default function HireATutorPage() {
 
                 {activeSlide === 1 && (
                   <div className="space-y-4 animate-in fade-in duration-300">
-                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold bg-[#00a65a]/10 text-[#00a65a]">
-                      <HeartHandshake className="h-4 w-4" />
-                      100% Risk-Free Guarantee
+                    <div className="flex items-center justify-between">
+                      <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold bg-[#00a65a]/10 text-[#00a65a]">
+                        <HeartHandshake className="h-4 w-4" />
+                        100% Risk-Free Guarantee
+                      </div>
+                      <Image
+                        src="/categories/002.png"
+                        alt="Trial Class"
+                        width={90}
+                        height={90}
+                        className="object-contain"
+                      />
                     </div>
                     <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight">
                       Free Demo Class &amp; 48-Hour Replacement Guarantee
@@ -264,9 +283,18 @@ export default function HireATutorPage() {
 
                 {activeSlide === 2 && (
                   <div className="space-y-4 animate-in fade-in duration-300">
-                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold bg-amber-500/10 text-amber-700">
-                      <Award className="h-4 w-4" />
-                      13 Specialized Mediums
+                    <div className="flex items-center justify-between">
+                      <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold bg-amber-500/10 text-amber-700">
+                        <Award className="h-4 w-4" />
+                        13 Specialized Mediums
+                      </div>
+                      <Image
+                        src="/categories/Guardian-01.png"
+                        alt="Guardian Experience"
+                        width={90}
+                        height={90}
+                        className="object-contain"
+                      />
                     </div>
                     <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight">
                       English Medium, Bangla, English Version &amp; Admission Test

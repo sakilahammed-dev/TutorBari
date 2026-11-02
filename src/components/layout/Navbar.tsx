@@ -69,7 +69,27 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-slate-200/90 bg-white/95 backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/95 transition-all">
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      {/* Caretutors Top Hotline & Helpline Bar */}
+      <div className="bg-[#0675c1] text-white py-1.5 px-4 text-xs font-semibold">
+        <div className="mx-auto flex max-w-7xl items-center justify-between">
+          <div className="flex items-center gap-4">
+            <a href="tel:09613441122" className="flex items-center gap-1.5 hover:underline text-white font-medium">
+              <span>📞 Helpline: 09613 441122 / 01700-000001</span>
+            </a>
+            <span className="hidden sm:inline text-white/50">•</span>
+            <span className="hidden sm:inline text-white/90">#1 Trusted Platform for Verified Tutors & Tuitions</span>
+          </div>
+          <div className="flex items-center gap-4 text-white/90">
+            <Link href="/job/list" className="hover:underline hidden md:inline">Live Tuitions</Link>
+            <span className="hidden md:inline text-white/50">|</span>
+            <Link href="/hire-a-tutor" className="hover:underline hidden md:inline">Hire a Tutor</Link>
+            <span className="hidden md:inline text-white/50">|</span>
+            <Link href="/signup/tutor" className="hover:underline hidden md:inline font-bold text-white">Become a Tutor</Link>
+          </div>
+        </div>
+      </div>
+
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#0675c1] text-white shadow-md shadow-[#0675c1]/20 group-hover:bg-[#125a9c] transition-colors">

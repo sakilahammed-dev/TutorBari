@@ -18,6 +18,8 @@ import {
   Award,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { HeroCoverflowCarousel } from "@/components/home/HeroCoverflowCarousel";
+import { CategoriesAutoCarousel } from "@/components/home/CategoriesAutoCarousel";
 
 export default function HomePage() {
   const stats = [
@@ -228,59 +230,9 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Right Hero Card / Visual */}
-            <div className="lg:col-span-5">
-              <div className="rounded-2xl border border-slate-200 bg-white p-7 shadow-xl shadow-slate-200/50 relative">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                    <span className="text-sm font-bold text-slate-900">Need a Tutor Quickly?</span>
-                    <span className="text-xs font-semibold text-[#00a65a] bg-emerald-50 px-2.5 py-0.5 rounded-full">
-                      Free Request
-                    </span>
-                  </div>
-
-                  <div>
-                    <label className="text-xs font-semibold text-slate-600 block mb-1">What medium is the student studying in?</label>
-                    <select className="h-11 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-800 focus:border-[#0675c1] focus:outline-none">
-                      <option>English Medium (Cambridge / Edexcel)</option>
-                      <option>Bangla Medium</option>
-                      <option>English Version</option>
-                      <option>Religious Studies / Quran</option>
-                      <option>Admission Test Preparation</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="text-xs font-semibold text-slate-600 block mb-1">Select Class / Level</label>
-                    <select className="h-11 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-800 focus:border-[#0675c1] focus:outline-none">
-                      <option>Class 9 - 10 / SSC</option>
-                      <option>HSC (1st / 2nd Year)</option>
-                      <option>O Level / IGCSE</option>
-                      <option>A Level</option>
-                      <option>Class 1 - 5 (Primary)</option>
-                      <option>Class 6 - 8 (Junior)</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="text-xs font-semibold text-slate-600 block mb-1">Your Location / City</label>
-                    <div className="relative">
-                      <MapPin className="absolute left-3 top-3.5 h-4 w-4 text-slate-400" />
-                      <input
-                        type="text"
-                        placeholder="e.g. Mirpur, Dhanmondi, Uttara..."
-                        className="h-11 w-full rounded-lg border border-slate-200 bg-slate-50 pl-9 pr-3 text-sm text-slate-800 focus:border-[#0675c1] focus:outline-none"
-                      />
-                    </div>
-                  </div>
-
-                  <Link href="/hire-a-tutor" className="block pt-2">
-                    <Button className="w-full h-11 bg-[#0675c1] hover:bg-[#125a9c] text-white font-bold text-sm">
-                      Get Verified Tutors Now
-                    </Button>
-                  </Link>
-                </div>
-              </div>
+            {/* Right Hero: Caretutors 3D Coverflow Carousel */}
+            <div className="lg:col-span-5 w-full flex justify-center">
+              <HeroCoverflowCarousel />
             </div>
           </div>
         </div>
@@ -411,9 +363,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 6. Serving Categories (13 Categories Grid with real extracted icons) */}
+      {/* 6. Serving Categories (Caretutors 1:1 Auto-sliding Carousel: Tall Centered Box With Pictures) */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-12">
+        <div className="text-center max-w-2xl mx-auto mb-4">
           <span className="text-xs font-bold uppercase tracking-wider text-[#0675c1]">
             13 Serving Categories
           </span>
@@ -421,35 +373,11 @@ export default function HomePage() {
             Serving Categories
           </h2>
           <p className="mt-2 text-slate-600 text-sm">
-            Find qualified specialist tutors across all major academic and professional tracks.
+            Find qualified specialist tutors across all major academic and professional mediums.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {categories.map((cat, idx) => (
-            <Link
-              key={idx}
-              href={`/job/list?category=${encodeURIComponent(cat.title)}`}
-              className="group rounded-xl border border-slate-200 bg-white p-4 shadow-sm hover:shadow-md hover:border-[#0675c1] transition-all flex items-center gap-3.5"
-            >
-              <div className="flex h-13 w-13 shrink-0 items-center justify-center rounded-lg bg-slate-50 p-1.5 border border-slate-100 group-hover:scale-105 transition-transform">
-                <Image
-                  src={cat.icon}
-                  alt={cat.title}
-                  width={42}
-                  height={42}
-                  className="object-contain"
-                />
-              </div>
-              <div className="overflow-hidden">
-                <h3 className="font-bold text-slate-900 text-sm group-hover:text-[#0675c1] transition-colors truncate">
-                  {cat.title}
-                </h3>
-                <p className="text-xs text-slate-500 truncate">{cat.subtitle}</p>
-              </div>
-            </Link>
-          ))}
-        </div>
+        <CategoriesAutoCarousel />
       </section>
 
       {/* 7. Guardian Testimonials Banner */}

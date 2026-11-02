@@ -20,12 +20,14 @@ import {
 import { Button } from "@/components/ui/Button";
 import { HeroCoverflowCarousel } from "@/components/home/HeroCoverflowCarousel";
 import { CategoriesAutoCarousel } from "@/components/home/CategoriesAutoCarousel";
+import TestimonialReel from "@/components/home/TestimonialReel";
+import testimonialsData from "@/data/testimonials.json";
 
 export default function HomePage() {
   const stats = [
-    { label: "Active Tutors", value: "150,000+" },
-    { label: "Live Tuition Jobs", value: "2,800+" },
-    { label: "Happy Students", value: "85,000+" },
+    { label: "Active Tutors", value: "350,000+" },
+    { label: "Live Tuition Jobs", value: "3,200+" },
+    { label: "Happy Students", value: "95,000+" },
     { label: "Average Tutor Rating", value: "4.9 / 5" },
   ];
 
@@ -38,551 +40,547 @@ export default function HomePage() {
     {
       title: "Home Tutoring",
       desc: "Home tutoring allows students to learn various subjects in their own home.",
-      icon: HomeIcon,
-      badge: "Popular",
-    },
-    {
-      title: "Online Tutoring",
-      desc: "Online tutoring allows students to learn from anywhere in the world with flexible scheduling.",
-      icon: Laptop,
-      badge: "Flexible",
+      icon: "/landing_page/hometutor.svg",
     },
     {
       title: "Group Tutoring",
       desc: "Group tutoring allows students to learn together and solve problems at an affordable cost.",
-      icon: Users,
-      badge: "Affordable",
+      icon: "/landing_page/groupclass.svg",
+    },
+    {
+      title: "Online Tutoring",
+      desc: "Hire the best tutors from anywhere and take online classes by using tools such as Google Meet, Zoom and more.",
+      icon: "/landing_page/onlinetutor.svg",
     },
     {
       title: "Package Tutoring",
       desc: "Package tutoring helps students to complete their studies within a specific time frame.",
-      icon: Layers,
-      badge: "Milestone",
-    },
-    {
-      title: "Shadow Tutoring",
-      desc: "The tutor will help the student manage school, routine, and simple daily needs.",
-      icon: GraduationCap,
-      badge: "Special Care",
+      icon: "/landing_page/package.svg",
     },
   ];
 
-  const categories = [
-    { title: "Bangla Medium", subtitle: "Class 1 - 12, SSC, HSC", icon: "/categories/Bangla.png" },
-    { title: "English Medium", subtitle: "Cambridge & Edexcel", icon: "/categories/English_Medium.png" },
-    { title: "English Version", subtitle: "National Curriculum in English", icon: "/categories/English_Version.png" },
-    { title: "Religious Studies", subtitle: "Quran, Tajweed & Arabic", icon: "/categories/Arabic.png" },
-    { title: "Admission Test", subtitle: "BUET, Medical & Public Uni", icon: "/categories/Admmission.png" },
-    { title: "Arts & Culture", subtitle: "Drawing, Painting & Music", icon: "/categories/Arts.png" },
-    { title: "Language Learning", subtitle: "IELTS, Spoken English, French", icon: "/categories/Language.png" },
-    { title: "Test Preparation", subtitle: "GRE, SAT, TOEFL, GMAT", icon: "/categories/Test_Preparation.png" },
-    { title: "Professional Skill", subtitle: "Graphic, Web Dev & Marketing", icon: "/categories/Professional_Skill.png" },
-    { title: "Special Skill", subtitle: "Handwriting, Chess & Debate", icon: "/categories/Special_Skill.png" },
-    { title: "Uni Help", subtitle: "University Courses & Engineering", icon: "/categories/Uni_help.png" },
-    { title: "Madrasa Medium", subtitle: "Dakhil, Alim & Hafizia", icon: "/categories/Madrasa.png" },
-    { title: "Special Child Education", subtitle: "Autism, ADHD & Special Care", icon: "/categories/Special_Child.png" },
-  ];
-
-  const guardianSteps = [
-    {
-      step: "01",
-      title: "Submit Requirement",
-      desc: "Submit your needs in details so qualified and verified tutors can apply for your post.",
-      image: "/categories/guardianSep1.png",
-      icon: FileCheck,
-    },
-    {
-      step: "02",
-      title: "Shortlist Tutors",
-      desc: "Review the applied list and shortlist up to 5 verified tutors based on CV, rating, and university.",
-      image: "/categories/guardianSep2.png",
-      icon: Users,
-    },
-    {
-      step: "03",
-      title: "Confirm Hiring",
-      desc: "Conduct 1-2 free trial classes, finalize your chosen tutor, and receive the digital confirmation letter.",
-      image: "/categories/guardianSep.png",
-      icon: Award,
-    },
-  ];
-
-  const tutorSteps = [
-    {
-      step: "01",
-      title: "Complete Profile",
-      desc: "Sign up as a tutor, fill out your educational qualifications, and upload your NID & Student ID.",
-      image: "/categories/Tutor-01.png",
-      icon: GraduationCap,
-    },
-    {
-      step: "02",
-      title: "Apply Smartly",
-      desc: "Browse our live job board and apply to tuition jobs matching your preferred class, location, and salary.",
-      image: "/categories/001.png",
-      icon: CheckCircle2,
-    },
-    {
-      step: "03",
-      title: "Get Hired",
-      desc: "Connect directly with shortlisted guardians, conduct trial classes, and start tutoring.",
-      image: "/categories/002.png",
-      icon: ShieldCheck,
-    },
-  ];
-
-  const guardianReviews = [
-    {
-      name: "Mrs. Nasrin Akter",
-      location: "Dhanmondi, Dhaka",
-      student: "Mother of Class 9 (English Medium) Student",
-      rating: 5,
-      comment: "Found an exceptional physics tutor from BUET within 24 hours. The verification process gave me complete peace of mind.",
-    },
-    {
-      name: "Engr. Mahmudul Hasan",
-      location: "Uttara, Dhaka",
-      student: "Father of HSC Candidate",
-      rating: 5,
-      comment: "The trial class system is fantastic. My son is now very confident in Higher Mathematics. Highly recommended platform!",
-    },
-    {
-      name: "Dr. Farzana Rahman",
-      location: "Panchlaish, Chattogram",
-      student: "Mother of Standard 4 Student",
-      rating: 5,
-      comment: "Prompt response and genuine verified profiles. Very professional and convenient service for busy working parents.",
-    },
-  ];
-
-  const tutorReviews = [
-    {
-      name: "Tahmid Chowdhury",
-      university: "Bangladesh University of Engineering and Technology (BUET)",
-      tuitionsDone: "18 Tuitions Completed",
-      rating: 5,
-      comment: "TutorBari is by far the most transparent and reliable platform in Bangladesh. I get regular tuitions right in my neighboring areas.",
-    },
-    {
-      name: "Afia Sultana",
-      university: "University of Dhaka (Department of English)",
-      tuitionsDone: "12 Tuitions Completed",
-      rating: 5,
-      comment: "The digital confirmation letter protects tutors completely. Prompt notifications and wonderful support team!",
-    },
-    {
-      name: "Sadman Sakib",
-      university: "Dhaka Medical College (DMC)",
-      tuitionsDone: "15 Tuitions Completed",
-      rating: 5,
-      comment: "Applying is seamless and filtering jobs by location saves huge commute time. Best platform for university tutors.",
-    },
+  const newsLogos = [
+    { name: "The Daily Star", src: "/news/news02.png" },
+    { name: "Daily Ittefaq", src: "/news/news03.png" },
+    { name: "Dhaka Tribune", src: "/news/news04.png" },
+    { name: "Prothom Alo", src: "/news/news05.png" },
+    { name: "Kaler Kantho", src: "/news/news08.png" },
+    { name: "Samakal", src: "/news/news09.png" },
+    { name: "Bangladesh Pratidin", src: "/news/news12.png" },
+    { name: "Tech in Asia", src: "/news/news13.png" },
   ];
 
   return (
-    <div className="flex flex-col gap-20 pb-20">
-      {/* 1. Hero Section (Caretutors Style) */}
-      <section className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28 bg-[#f8fafc] border-b border-slate-200">
+    <div className="flex flex-col min-h-screen bg-white">
+      {/* 1. Hero Section (Caretutors 1:1 Layout) */}
+      <section className="relative overflow-hidden pt-8 pb-16 md:pt-12 md:pb-20 bg-gradient-to-b from-sky-50/40 via-white to-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Left Content */}
-            <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-4 py-1.5 text-xs font-bold text-[#0675c1]">
-                <span>#1 Tutor Matching Network in Bangladesh</span>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            
+            {/* Left Content Column */}
+            <div className="lg:col-span-6 flex flex-col items-start text-left z-10">
+              <div className="inline-flex items-center gap-2 rounded-full bg-sky-100/80 px-3.5 py-1 text-xs font-semibold text-[#0675c1] mb-5 border border-sky-200">
+                <span className="flex h-2 w-2 rounded-full bg-[#0675c1] animate-pulse" />
+                <span>#1 Platform for All Tutors in Bangladesh</span>
               </div>
 
-              <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl leading-[1.15]">
-                Hire the Right <span className="text-[#0675c1]">Tutor</span>
+              <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl lg:text-5xl xl:text-6xl leading-[1.15]">
+                Hire the Right{" "}
+                <span className="text-[#0675c1]">Tutor</span> Today
               </h1>
 
-              <p className="text-lg text-slate-600 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-                Book one-on-one lessons with verified tutors in your area. Qualified tutors from BUET, DU, Medical &amp; top universities ready for home &amp; online tutoring.
+              <p className="mt-4 text-base text-slate-600 sm:text-lg max-w-xl leading-relaxed">
+                Select from 350,000+ verified tutors for individual or group classes. Both online and offline tutoring available across Bangladesh.
               </p>
 
-              {/* CTAs */}
-              <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+              {/* Action Buttons */}
+              <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto">
                 <Link href="/hire-a-tutor">
-                  <Button size="lg" className="h-13 px-8 text-base bg-[#0675c1] hover:bg-[#125a9c] text-white font-bold shadow-md shadow-[#0675c1]/20">
+                  <Button size="lg" className="w-full sm:w-auto bg-[#0675c1] hover:bg-[#05619e] text-white font-bold h-12 px-8 rounded-xl shadow-lg shadow-[#0675c1]/25 text-base">
                     Hire a Tutor
+                    <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
-                <Link href="/signup/tutor" className="text-sm font-semibold text-slate-700 hover:text-[#0675c1] flex items-center gap-1.5 py-3 px-2">
-                  <span>Want to become a Tutor?</span>
-                  <span className="text-[#0675c1] underline underline-offset-4">Sign Up</span>
-                  <ArrowRight className="h-4 w-4 text-[#0675c1]" />
-                </Link>
+                <div className="flex items-center justify-center sm:justify-start px-2 py-1">
+                  <p className="text-sm text-slate-600">
+                    Want to become a Tutor?{" "}
+                    <Link href="/signup/tutor" className="font-bold text-[#0675c1] hover:underline">
+                      Sign Up now
+                    </Link>
+                  </p>
+                </div>
               </div>
 
-              {/* Quick Trust points */}
-              <div className="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-xs text-slate-500 font-semibold">
-                <span className="flex items-center gap-1.5">
-                  <CheckCircle2 className="h-4 w-4 text-[#00a65a]" />
-                  100% Free Tutor Request
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <CheckCircle2 className="h-4 w-4 text-[#00a65a]" />
-                  Verified NID &amp; Student ID
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <CheckCircle2 className="h-4 w-4 text-[#00a65a]" />
-                  1-2 Free Trial Classes
-                </span>
+              {/* Feature Points */}
+              <div className="mt-8 pt-6 border-t border-slate-200/80 w-full grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-700">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-[#0675c1] shrink-0" />
+                  <span className="font-medium">100% Free Tutor Request</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-[#0675c1] shrink-0" />
+                  <span className="font-medium">Verified Tutors (NID & ID)</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-[#0675c1] shrink-0" />
+                  <span className="font-medium">No Prepayment Required</span>
+                </div>
               </div>
             </div>
 
-            {/* Right Hero: Caretutors 3D Coverflow Carousel */}
-            <div className="lg:col-span-5 w-full flex justify-center">
+            {/* Right Column: Caretutors 1:1 3D Hero Coverflow Carousel */}
+            <div className="lg:col-span-6 w-full flex items-center justify-center">
               <HeroCoverflowCarousel />
             </div>
+
           </div>
         </div>
       </section>
 
-      {/* 2. Key Metrics Bar (Exact Caretutors Stats) */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 -mt-10 relative z-20">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 rounded-2xl bg-white p-6 shadow-lg border border-slate-200/80">
-          {stats.map((s, idx) => (
-            <div key={idx} className="text-center p-3 border-r last:border-none border-slate-100">
-              <span className="text-3xl sm:text-4xl font-extrabold text-[#0675c1] block">
-                {s.value}
-              </span>
-              <span className="text-xs sm:text-sm font-semibold text-slate-600 mt-1 block">
-                {s.label}
-              </span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 3. Popular Locations / Cities */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 border-b border-slate-200">
-          <div>
-            <h2 className="text-xl font-bold text-slate-900">Popular Tutoring Locations</h2>
-            <p className="text-xs text-slate-500">Find experienced home &amp; online tutors in your city</p>
+      {/* 2. Tuition Types (Caretutors 1:1 - 5 Types with SVGs & Border Hover) */}
+      <section className="py-14 sm:py-20 bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+              Tuition Types
+            </h2>
+            <p className="mt-2.5 text-center text-slate-500 text-sm md:text-base">
+              Find the Best Tuition Type that Suits You
+            </p>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {popularCities.map((city, idx) => (
-              <Link
+
+          {/* 2x2 Grid for first 4 types */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-7">
+            {tuitionTypes.map((t, idx) => (
+              <div
                 key={idx}
-                href={`/job/list?city=${encodeURIComponent(city)}`}
-                className="px-3 py-1 rounded-md text-xs font-semibold bg-white border border-slate-200 text-slate-700 hover:border-[#0675c1] hover:text-[#0675c1] transition-colors"
+                className="flex h-fit gap-6 rounded-2xl border border-[#0675c1] p-5 transition-all duration-200 ease-in-out hover:border-2 hover:bg-sky-50/20 md:h-[9.5rem] lg:gap-8 items-center bg-white shadow-sm"
               >
-                {city}
-              </Link>
+                <div className="relative shrink-0 w-20 h-20 flex items-center justify-center">
+                  <Image
+                    src={t.icon}
+                    alt={t.title}
+                    width={80}
+                    height={80}
+                    className="object-contain"
+                  />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-[#0675c1] mb-1.5">
+                    {t.title}
+                  </h3>
+                  <p className="text-slate-600 text-sm leading-relaxed">
+                    {t.desc}
+                  </p>
+                </div>
+              </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* 4. Tuition Types (Exact 5 Caretutors Formats) */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-12">
-          <span className="text-xs font-bold uppercase tracking-wider text-[#0675c1]">
-            Tuition Types
-          </span>
-          <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight sm:text-4xl mt-1">
-            Choose Your Preferred Tutoring Format
-          </h2>
-          <p className="mt-3 text-slate-600 text-sm">
-            Whether at home, online, in small groups, or specialized packages.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
-          {tuitionTypes.map((type, idx) => (
-            <div
-              key={idx}
-              className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-md hover:border-[#0675c1] transition-all flex flex-col justify-between"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#0675c114] text-[#0675c1]">
-                    <type.icon className="h-5 w-5" />
-                  </div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">
-                    {type.badge}
-                  </span>
-                </div>
-                <h3 className="text-base font-bold text-slate-900 mb-2">{type.title}</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">{type.desc}</p>
-              </div>
+          {/* 5th Centered Card: Shadow Tutoring */}
+          <div className="mx-auto mt-6 flex h-fit w-full md:w-3/5 lg:w-1/2 gap-6 rounded-2xl border border-[#0675c1] p-5 transition-all duration-200 ease-in-out hover:border-2 hover:bg-sky-50/20 md:h-[9.5rem] lg:gap-8 items-center bg-white shadow-sm">
+            <div className="relative shrink-0 w-20 h-20 flex items-center justify-center">
+              <Image
+                src="/landing_page/shadow_tutoring.svg"
+                alt="Shadow Tutoring"
+                width={80}
+                height={80}
+                className="object-contain"
+              />
             </div>
-          ))}
+            <div>
+              <h3 className="text-xl font-bold text-[#0675c1] mb-1.5">
+                Shadow Tutoring
+              </h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                The tutor will help the student manage school, routine, and simple daily needs.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* 5. How does it work for guardians/students? (3 Steps) */}
-      <section className="bg-white py-16 border-y border-slate-200">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#0675c1]">
-              For Guardians &amp; Students
-            </span>
-            <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight sm:text-4xl mt-1">
+      {/* 3. How does it work for guardians/students? (Caretutors 1:1 Alternating 3 Steps with Curved Connectors) */}
+      <section className="py-14 sm:py-20 bg-slate-50/60 border-y border-slate-200/60">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <h2 className="text-3xl font-bold text-slate-900 tracking-tight sm:text-4xl">
               How does it work for guardians/students?
             </h2>
-            <p className="mt-2 text-slate-600 text-sm">
-              Hire the right tutor by following these simple steps.
+            <p className="mt-2.5 text-center text-slate-500 text-sm md:text-base">
+              Hire the right tutor by following the simple steps.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {guardianSteps.map((step, idx) => (
-              <div key={idx} className="relative rounded-2xl border border-slate-200 p-6 bg-slate-50/50 hover:bg-white hover:border-[#0675c1]/50 hover:shadow-lg transition-all flex flex-col justify-between">
+          <div className="space-y-4">
+            {/* Step 1: Left aligned */}
+            <div className="relative flex items-center justify-between rounded-2xl bg-white p-6 shadow-sm border border-slate-200/70">
+              <div className="flex items-center gap-6 md:gap-10 p-2 md:w-4/5">
+                <Image
+                  src="/categories/guardianSep1.png"
+                  alt="Submit Requirement"
+                  width={150}
+                  height={150}
+                  className="size-24 sm:size-32 md:size-40 shrink-0 object-contain"
+                />
                 <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-4xl font-black text-[#0675c1]/20">{step.step}</span>
-                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#0675c1] text-white font-bold shadow-sm">
-                      <step.icon className="h-5 w-5" />
-                    </div>
-                  </div>
-                  <div className="flex justify-center my-3 h-36">
-                    <Image
-                      src={step.image}
-                      alt={step.title}
-                      width={140}
-                      height={140}
-                      className="object-contain"
-                    />
-                  </div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-2">{step.title}</h3>
-                  <p className="text-xs text-slate-600 leading-relaxed">{step.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-10 text-center">
-            <Link href="/hire-a-tutor">
-              <Button size="lg" className="bg-[#0675c1] hover:bg-[#125a9c] text-white font-bold px-8 shadow-sm">
-                Hire a Tutor Now
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. Serving Categories (Caretutors 1:1 Auto-sliding Carousel: Tall Centered Box With Pictures) */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-4">
-          <span className="text-xs font-bold uppercase tracking-wider text-[#0675c1]">
-            13 Serving Categories
-          </span>
-          <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight sm:text-4xl mt-1">
-            Serving Categories
-          </h2>
-          <p className="mt-2 text-slate-600 text-sm">
-            Find qualified specialist tutors across all major academic and professional mediums.
-          </p>
-        </div>
-
-        <CategoriesAutoCarousel />
-      </section>
-
-      {/* 7. Guardian Testimonials Banner */}
-      <section className="bg-slate-50 py-16 border-y border-slate-200">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#00a65a]">
-              Guardian Reviews
-            </span>
-            <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight sm:text-4xl mt-1">
-              What Some Awesome Guardian/Student Says about Us
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {guardianReviews.map((rev, idx) => (
-              <div key={idx} className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center gap-1 text-amber-400 mb-3">
-                    {[...Array(rev.rating)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-amber-400" />
-                    ))}
-                  </div>
-                  <p className="text-xs text-slate-700 leading-relaxed italic mb-4">
-                    &ldquo;{rev.comment}&rdquo;
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#0675c1] bg-sky-50 px-2.5 py-0.5 rounded-full border border-sky-100">
+                    Step 01
+                  </span>
+                  <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mt-2 mb-1.5">
+                    Submit Requirement
+                  </h3>
+                  <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                    Submit your needs in details so qualified tutors can apply directly to your tuition job.
                   </p>
                 </div>
-                <div className="pt-3 border-t border-slate-100">
-                  <h4 className="text-sm font-bold text-slate-900">{rev.name}</h4>
-                  <p className="text-xs text-slate-500">{rev.student}</p>
-                  <p className="text-[11px] text-[#0675c1] font-semibold">{rev.location}</p>
+              </div>
+              <div className="-mb-24 hidden md:inline-flex h-[130px] w-[180px] shrink-0">
+                <svg viewBox="0 0 229 173" fill="none" className="w-full h-full">
+                  <path
+                    d="M0 3H152C192.869 3 226 36.1309 226 77V173"
+                    stroke="#0675C1"
+                    strokeWidth="3.5"
+                    strokeDasharray="8 8"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            {/* Step 2: Right aligned */}
+            <div className="relative flex items-center justify-between rounded-2xl bg-white p-6 shadow-sm border border-slate-200/70">
+              <div className="-mb-24 hidden md:inline-flex h-[130px] w-[180px] shrink-0">
+                <svg viewBox="0 0 229 173" fill="none" className="w-full h-full">
+                  <path
+                    d="M229 3H77C36.1309 3 3.00001 36.1309 3.00001 77V173"
+                    stroke="#0675C1"
+                    strokeWidth="3.5"
+                    strokeDasharray="8 8"
+                  />
+                </svg>
+              </div>
+              <div className="flex items-center gap-6 md:gap-10 p-2 md:w-4/5 justify-end text-right">
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#0675c1] bg-sky-50 px-2.5 py-0.5 rounded-full border border-sky-100">
+                    Step 02
+                  </span>
+                  <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mt-2 mb-1.5">
+                    Shortlist Tutors
+                  </h3>
+                  <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                    Select the best match from applied tutors, review their verified credentials, and schedule trial classes.
+                  </p>
+                </div>
+                <Image
+                  src="/categories/guardianSep2.png"
+                  alt="Shortlist Tutors"
+                  width={150}
+                  height={150}
+                  className="size-24 sm:size-32 md:size-40 shrink-0 object-contain"
+                />
+              </div>
+            </div>
+
+            {/* Step 3: Left aligned */}
+            <div className="relative flex items-center justify-between rounded-2xl bg-white p-6 shadow-sm border border-slate-200/70">
+              <div className="flex items-center gap-6 md:gap-10 p-2 md:w-4/5">
+                <Image
+                  src="/categories/guardianSep.png"
+                  alt="Confirm Hiring"
+                  width={150}
+                  height={150}
+                  className="size-24 sm:size-32 md:size-40 shrink-0 object-contain"
+                />
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#0675c1] bg-sky-50 px-2.5 py-0.5 rounded-full border border-sky-100">
+                    Step 03
+                  </span>
+                  <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mt-2 mb-1.5">
+                    Confirm Hiring
+                  </h3>
+                  <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                    Take trial classes to evaluate teaching quality, confirm your selected tutor, and start learning with complete safety.
+                  </p>
                 </div>
               </div>
-            ))}
-          </div>
-
-          {/* Banner CTA */}
-          <div className="mt-12 rounded-2xl bg-[#0675c1] p-8 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-lg shadow-[#0675c1]/20">
-            <div>
-              <h3 className="text-2xl font-bold">Hire a tutor today and start learning!</h3>
-              <p className="text-xs text-sky-100 mt-1">Free tutor request. Get qualified teacher profiles within hours.</p>
             </div>
-            <Link href="/hire-a-tutor">
-              <Button size="lg" className="bg-white text-slate-900 hover:bg-slate-100 font-bold shrink-0">
-                Hire a Tutor
-              </Button>
-            </Link>
           </div>
         </div>
       </section>
 
-      {/* 8. How does it work for tutors? (3 Steps) */}
-      <section className="py-16">
+      {/* 4. Serving Categories (Caretutors 1:1 Auto-Slider with Tall Card & 220x220 Pictures) */}
+      <section className="py-14 sm:py-20 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#0675c1]">
-              For Tutors
-            </span>
-            <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight sm:text-4xl mt-1">
+          <CategoriesAutoCarousel />
+        </div>
+      </section>
+
+      {/* 5. Guardian Testimonials (Caretutors 1:1 Vertical Avatar Reel & Quotes) */}
+      <section className="py-14 sm:py-20 bg-slate-50/70 border-y border-slate-200/70">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <TestimonialReel
+            title="What Some Awesome Guardian/Student Says about Us"
+            subtitle="Hire a tutor today and start learning!"
+            ctaText="Hire a Tutor"
+            ctaLink="/hire-a-tutor"
+            items={testimonialsData.parents}
+          />
+        </div>
+      </section>
+
+      {/* 6. How does it work for tutors? (Caretutors 1:1 Alternating 3 Steps with Curved Connectors) */}
+      <section className="py-14 sm:py-20 bg-white">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <h2 className="text-3xl font-bold text-slate-900 tracking-tight sm:text-4xl">
               How does it work for tutors?
             </h2>
-            <p className="mt-2 text-slate-600 text-sm">
-              Find your desired tuitions by following the simple steps.
+            <p className="mt-2.5 text-center text-slate-500 text-sm md:text-base">
+              Start your tutoring journey in 3 simple steps.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {tutorSteps.map((step, idx) => (
-              <div key={idx} className="relative rounded-2xl border border-slate-200 p-6 bg-slate-50/50 hover:bg-white hover:border-[#00a65a]/50 hover:shadow-lg transition-all flex flex-col justify-between">
+          <div className="space-y-4">
+            {/* Step 1: Left aligned */}
+            <div className="relative flex items-center justify-between rounded-2xl bg-slate-50 p-6 shadow-sm border border-slate-200/70">
+              <div className="flex items-center gap-6 md:gap-10 p-2 md:w-4/5">
+                <Image
+                  src="/categories/Tutor-01.png"
+                  alt="Complete Profile"
+                  width={150}
+                  height={150}
+                  className="size-24 sm:size-32 md:size-40 shrink-0 object-contain"
+                />
                 <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-4xl font-black text-[#00a65a]/20">{step.step}</span>
-                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#00a65a] text-white font-bold shadow-sm">
-                      <step.icon className="h-5 w-5" />
-                    </div>
-                  </div>
-                  <div className="flex justify-center my-3 h-36">
-                    <Image
-                      src={step.image}
-                      alt={step.title}
-                      width={140}
-                      height={140}
-                      className="object-contain"
-                    />
-                  </div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-2">{step.title}</h3>
-                  <p className="text-xs text-slate-600 leading-relaxed">{step.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-10 text-center">
-            <Link href="/signup/tutor">
-              <Button size="lg" className="bg-[#00a65a] hover:bg-[#008d4c] text-white font-bold px-8 shadow-sm">
-                Become a Tutor
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* 9. Tutor Testimonials Banner */}
-      <section className="bg-white py-16 border-t border-slate-200">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#0675c1]">
-              Tutor Reviews
-            </span>
-            <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight sm:text-4xl mt-1">
-              What Some Awesome Tutor Says about Us
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {tutorReviews.map((rev, idx) => (
-              <div key={idx} className="rounded-xl border border-slate-200 bg-slate-50 p-6 shadow-sm flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center gap-1 text-amber-400 mb-3">
-                    {[...Array(rev.rating)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-amber-400" />
-                    ))}
-                  </div>
-                  <p className="text-xs text-slate-700 leading-relaxed italic mb-4">
-                    &ldquo;{rev.comment}&rdquo;
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#0675c1] bg-sky-100/60 px-2.5 py-0.5 rounded-full border border-sky-200">
+                    Step 01
+                  </span>
+                  <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mt-2 mb-1.5">
+                    Complete Profile
+                  </h3>
+                  <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                    Create your tutor profile with education details, preferred classes and subjects, and verify your credentials.
                   </p>
                 </div>
-                <div className="pt-3 border-t border-slate-200">
-                  <h4 className="text-sm font-bold text-slate-900">{rev.name}</h4>
-                  <p className="text-xs text-slate-500 line-clamp-1">{rev.university}</p>
-                  <p className="text-[11px] text-[#00a65a] font-semibold">{rev.tuitionsDone}</p>
+              </div>
+              <div className="-mb-24 hidden md:inline-flex h-[130px] w-[180px] shrink-0">
+                <svg viewBox="0 0 229 173" fill="none" className="w-full h-full">
+                  <path
+                    d="M0 3H152C192.869 3 226 36.1309 226 77V173"
+                    stroke="#0675C1"
+                    strokeWidth="3.5"
+                    strokeDasharray="8 8"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            {/* Step 2: Right aligned */}
+            <div className="relative flex items-center justify-between rounded-2xl bg-slate-50 p-6 shadow-sm border border-slate-200/70">
+              <div className="-mb-24 hidden md:inline-flex h-[130px] w-[180px] shrink-0">
+                <svg viewBox="0 0 229 173" fill="none" className="w-full h-full">
+                  <path
+                    d="M229 3H77C36.1309 3 3.00001 36.1309 3.00001 77V173"
+                    stroke="#0675C1"
+                    strokeWidth="3.5"
+                    strokeDasharray="8 8"
+                  />
+                </svg>
+              </div>
+              <div className="flex items-center gap-6 md:gap-10 p-2 md:w-4/5 justify-end text-right">
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#0675c1] bg-sky-100/60 px-2.5 py-0.5 rounded-full border border-sky-200">
+                    Step 02
+                  </span>
+                  <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mt-2 mb-1.5">
+                    Apply Smartly
+                  </h3>
+                  <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                    Browse verified live tuition opportunities matching your area and salary expectations, and apply with ease.
+                  </p>
+                </div>
+                <Image
+                  src="/categories/001.png"
+                  alt="Apply Smartly"
+                  width={150}
+                  height={150}
+                  className="size-24 sm:size-32 md:size-40 shrink-0 object-contain"
+                />
+              </div>
+            </div>
+
+            {/* Step 3: Left aligned */}
+            <div className="relative flex items-center justify-between rounded-2xl bg-slate-50 p-6 shadow-sm border border-slate-200/70">
+              <div className="flex items-center gap-6 md:gap-10 p-2 md:w-4/5">
+                <Image
+                  src="/categories/002.png"
+                  alt="Get Hired"
+                  width={150}
+                  height={150}
+                  className="size-24 sm:size-32 md:size-40 shrink-0 object-contain"
+                />
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#0675c1] bg-sky-100/60 px-2.5 py-0.5 rounded-full border border-sky-200">
+                    Step 03
+                  </span>
+                  <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mt-2 mb-1.5">
+                    Get Hired
+                  </h3>
+                  <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                    Deliver demo classes, get confirmed by the guardian, receive official confirmation, and start tutoring.
+                  </p>
                 </div>
               </div>
-            ))}
-          </div>
-
-          {/* Banner CTA */}
-          <div className="mt-12 rounded-2xl bg-[#111827] p-8 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
-            <div>
-              <h3 className="text-2xl font-bold">Become a tutor and start earning!</h3>
-              <p className="text-xs text-slate-400 mt-1">Create your verified profile today and start applying to hundreds of live tuitions.</p>
             </div>
-            <Link href="/signup/tutor">
-              <Button size="lg" className="bg-[#00a65a] hover:bg-[#008d4c] text-white font-bold shrink-0">
-                Sign Up as Tutor
-              </Button>
-            </Link>
           </div>
         </div>
       </section>
 
-      {/* 10. Mobile App Download Banner */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="rounded-2xl border border-slate-200 bg-gradient-to-r from-slate-900 to-[#07243c] p-8 sm:p-12 text-white">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-8 space-y-4">
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-xs font-semibold text-sky-300">
-                <Smartphone className="h-4 w-4" />
-                <span>TutorBari Official Mobile App</span>
+      {/* 7. Tutor Testimonials (Caretutors 1:1 Vertical Avatar Reel & Quotes) */}
+      <section className="py-14 sm:py-20 bg-slate-50/70 border-y border-slate-200/70">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <TestimonialReel
+            title="What Some Awesome Tutor Says about Us"
+            subtitle="Become a tutor and start earning!"
+            ctaText="Become a Tutor"
+            ctaLink="/signup/tutor"
+            items={testimonialsData.tutors}
+          />
+        </div>
+      </section>
+
+      {/* 8. #1 Platform for All Tutors (Caretutors 1:1 Mobile App Banner with QR Code & Store Badges) */}
+      <section className="py-14 sm:py-20 bg-white">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="rounded-3xl bg-[#0675c1] p-8 md:p-14 text-white shadow-2xl shadow-[#0675c1]/30 flex flex-col md:flex-row items-center justify-between gap-10">
+            
+            <div className="max-w-xl text-center md:text-left">
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-sky-100 mb-4 backdrop-blur-sm">
+                <Smartphone className="h-3.5 w-3.5" />
+                <span>Mobile App Available</span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-                Manage Your Tuitions On the Go
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
+                #1 Platform for All Tutors
               </h2>
-              <p className="text-slate-300 text-sm max-w-xl leading-relaxed">
-                Download the official TutorBari app to receive instant push alerts for matching tuition jobs, track applications, and communicate with guardians in real time.
+              <p className="mt-4 text-sm sm:text-base text-sky-100 leading-relaxed">
+                Download the official TutorBari app to receive instant push alerts for matching tuition jobs, apply on the go, track applications, and manage your tutoring journey easily.
               </p>
-              <div className="pt-2 flex flex-wrap gap-3">
+
+              {/* Store buttons */}
+              <div className="mt-8 flex items-center justify-center md:justify-start gap-4">
                 <a
-                  href="https://play.google.com"
+                  href="https://play.google.com/store/apps/details?id=com.caretutors"
                   target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-3 bg-white text-slate-900 font-bold px-5 py-2.5 rounded-xl hover:bg-slate-100 transition-colors text-xs"
+                  rel="noopener noreferrer"
+                  className="transition-transform hover:scale-105 active:scale-95"
                 >
-                  <Smartphone className="h-5 w-5 text-[#0675c1]" />
-                  <div className="text-left">
-                    <span className="block text-[10px] text-slate-500 uppercase font-medium">Get it on</span>
-                    <span>Google Play</span>
-                  </div>
+                  <Image
+                    src="/landing/playStore.svg"
+                    alt="Google Play Store"
+                    width={150}
+                    height={44}
+                    className="h-11 w-auto"
+                  />
                 </a>
                 <a
-                  href="https://apple.com/app-store"
+                  href="https://apps.apple.com/us/app/caretutors/id1607736513"
                   target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-3 bg-white/10 text-white border border-white/20 font-bold px-5 py-2.5 rounded-xl hover:bg-white/20 transition-colors text-xs"
+                  rel="noopener noreferrer"
+                  className="transition-transform hover:scale-105 active:scale-95"
                 >
-                  <Smartphone className="h-5 w-5 text-sky-400" />
-                  <div className="text-left">
-                    <span className="block text-[10px] text-slate-300 uppercase font-medium">Download on the</span>
-                    <span>App Store</span>
-                  </div>
+                  <Image
+                    src="/landing/appStore.svg"
+                    alt="Apple App Store"
+                    width={150}
+                    height={44}
+                    className="h-11 w-auto"
+                  />
                 </a>
               </div>
             </div>
 
-            <div className="lg:col-span-4 flex justify-center">
-              <div className="bg-white p-4 rounded-2xl shadow-xl flex flex-col items-center">
+            {/* QR Code container */}
+            <div className="hidden sm:flex flex-col items-center justify-center bg-white rounded-2xl p-5 shadow-xl shrink-0">
+              <Image
+                src="/caretutors-app-qr-code.png"
+                alt="Scan QR Code to Download App"
+                width={180}
+                height={180}
+                className="w-40 h-40 object-contain"
+              />
+              <p className="mt-3 text-xs font-bold text-slate-800 tracking-tight">
+                Scan to Download App
+              </p>
+              <p className="text-[11px] text-slate-500">Android &amp; iOS</p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* 9. We were featured on (Caretutors 1:1 Press Mentions Strip) */}
+      <section className="py-12 sm:py-16 bg-slate-50/50 border-t border-slate-200/60">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+              We were featured on
+            </h2>
+            <p className="mt-2 text-xs sm:text-sm text-slate-500">
+              Leading national and international media publications that covered our journey
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-6 items-center justify-center">
+            {newsLogos.map((news, idx) => (
+              <div
+                key={idx}
+                className="flex items-center justify-center p-3 rounded-xl bg-white border border-slate-200/60 shadow-sm transition-all duration-300 hover:shadow-md hover:scale-105 grayscale hover:grayscale-0 opacity-80 hover:opacity-100 h-16"
+              >
                 <Image
-                  src="/categories/caretutors-app-qr-code.png"
-                  alt="App QR Code"
-                  width={140}
-                  height={140}
-                  className="rounded-lg"
+                  src={news.src}
+                  alt={news.name}
+                  width={120}
+                  height={40}
+                  className="max-h-8 w-auto object-contain"
                 />
-                <span className="text-[11px] font-bold text-slate-800 mt-2">Scan to Download App</span>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 10. Platform Stats & Popular Locations (Trust Bar before Footer) */}
+      <section className="py-12 bg-white border-t border-slate-200">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          {/* Stats Bar */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center pb-10 border-b border-slate-100">
+            {stats.map((s, idx) => (
+              <div key={idx} className="p-3">
+                <p className="text-2xl sm:text-3xl font-black text-[#0675c1]">
+                  {s.value}
+                </p>
+                <p className="text-xs sm:text-sm font-semibold text-slate-600 mt-1">
+                  {s.label}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* Popular Cities list */}
+          <div className="mt-8 text-center">
+            <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">
+              Popular Tutoring Locations
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              {popularCities.map((city, idx) => (
+                <Link
+                  key={idx}
+                  href={`/tuitions?district=${encodeURIComponent(city)}`}
+                  className="rounded-full bg-slate-100 hover:bg-[#0675c1] hover:text-white px-3.5 py-1 text-xs font-medium text-slate-700 transition-colors"
+                >
+                  {city}
+                </Link>
+              ))}
             </div>
           </div>
         </div>

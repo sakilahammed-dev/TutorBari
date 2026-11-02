@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { JobPost } from "@/lib/types";
 import { Button } from "@/components/ui/Button";
+import { JobDiscussionComments } from "@/components/jobs/JobDiscussionComments";
 
 interface SingleJobViewClientProps {
   jobId: string;
@@ -363,6 +364,9 @@ export function SingleJobViewClient({ jobId, initialJob }: SingleJobViewClientPr
                 </div>
               </div>
             </div>
+
+            {/* Questions & Discussion Comments Box */}
+            <JobDiscussionComments jobId={Number(jobId)} currentUser={currentUser} />
           </div>
 
           {/* Right Column: Sticky Action & Safety Card */}

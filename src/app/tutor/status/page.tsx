@@ -16,8 +16,10 @@ import {
   Trash2,
   ChevronRight,
   ExternalLink,
+  MessageCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { ApplicationChatModal } from "@/components/common/ApplicationChatModal";
 
 type TabType = "ALL" | "PENDING" | "SHORTLISTED" | "DEMO_SCHEDULED" | "APPOINTED" | "CANCELLED";
 
@@ -26,6 +28,7 @@ export default function TutorStatusPage() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<TabType>("ALL");
   const [withdrawingId, setWithdrawingId] = useState<number | null>(null);
+  const [chatApp, setChatApp] = useState<any | null>(null);
 
   const fetchApplications = () => {
     setLoading(true);
@@ -201,6 +204,15 @@ export default function TutorStatusPage() {
                 </div>
 
                 <div className="flex sm:flex-col justify-end items-end gap-2.5 border-t sm:border-t-0 sm:border-l border-slate-100 pt-4 sm:pt-0 sm:pl-6">
+                  <Button
+                    variant="outline"
+                    onClick={() => setChatApp(app)}
+                    className="text-xs h-9 px-3.5 text-[#0675c1] border-[#0675c1]/30 hover:bg-blue-50 font-bold gap-1.5"
+                  >
+                    <MessageCircle className="h-3.5 w-3.5" />
+                    Chat & Feedback
+                  </Button>
+
                   <Link href={`/job/view/${app.jobId}`}>
                     <Button variant="outline" className="text-xs h-9 px-4 font-bold">
                       View Job <ExternalLink className="h-3 w-3 ml-1" />
@@ -227,6 +239,19 @@ export default function TutorStatusPage() {
               </div>
             ))}
           </div>
+        )}
+
+        {/* Tutor-Guardian Direct Chat Modal */}
+        {chatApp && (
+          <ApplicationChatModal
+            applicationId={chatApp.id}
+            jobId={chatApp.jobId}
+            jobTitle={chatApp.job?.title || `Tuition Job #${chatApp.jobId}`}
+            otherPartyName={chatApp.job?.guardianName || "Guardian"}
+            otherPartyRole="GUARDIAN"
+            currentUserRole="TUTOR"
+            onClose={() => setChatApp(null)}
+          />
         )}
       </div>
     </div>

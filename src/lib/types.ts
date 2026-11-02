@@ -218,3 +218,41 @@ export interface Lead {
   status: "NEW" | "CONTACTED" | "CONVERTED" | "DROPPED";
   createdAt: string;
 }
+
+export interface JobComment {
+  id: string;
+  jobId: number;
+  userId: string;
+  authorName: string;
+  authorRole: "GUARDIAN" | "TUTOR" | "ADMIN";
+  authorInstitution?: string;
+  message: string;
+  parentId?: string;
+  createdAt: string;
+  likes?: number;
+}
+
+export interface ApplicationMessage {
+  id: string;
+  applicationId: string;
+  jobId: number;
+  senderId: string;
+  senderName: string;
+  senderRole: "GUARDIAN" | "TUTOR" | "ADMIN";
+  message: string;
+  createdAt: string;
+  isRead?: boolean;
+}
+
+export interface TutorReview {
+  id: string;
+  tutorId: string;
+  guardianId: string;
+  guardianName: string;
+  rating: number;
+  comment: string;
+  subjects?: string;
+  className?: string;
+  createdAt: string;
+}
+

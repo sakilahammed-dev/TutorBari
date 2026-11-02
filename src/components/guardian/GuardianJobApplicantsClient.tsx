@@ -22,8 +22,11 @@ import {
   ThumbsDown,
   ArrowRight,
   BookOpen,
+  MessageCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { ApplicationChatModal } from "@/components/common/ApplicationChatModal";
+import { TutorReviewModal } from "@/components/common/TutorReviewModal";
 
 interface TutorApplicant {
   id: string;
@@ -78,6 +81,10 @@ export function GuardianJobApplicantsClient({ jobId }: GuardianJobApplicantsClie
   const [demoNotes, setDemoNotes] = useState("");
   const [updating, setUpdating] = useState(false);
   const [actionSuccess, setActionSuccess] = useState<string | null>(null);
+
+  // Chat & Review Modal State
+  const [chatApp, setChatApp] = useState<TutorApplicant | null>(null);
+  const [reviewTutor, setReviewTutor] = useState<TutorApplicant | null>(null);
 
   const fetchApplicants = () => {
     fetch(`/api/guardian/jobs/${jobId}/applicants`)
@@ -449,6 +456,30 @@ export function GuardianJobApplicantsClient({ jobId }: GuardianJobApplicantsClie
                           Decline
                         </Button>
                       )}
+
+                      {/* Tutor & Guardian Direct Comments / Chat */}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setChatApp(app)}
+                        className="text-xs font-bold gap-1.5 text-[#0675c1] border-[#0675c1]/30 hover:bg-blue-50"
+                      >
+                        <MessageCircle className="h-3.5 w-3.5" />
+                        Comments & Chat
+                      </Button>
+
+                      {/* Guardian Review on Tutor */}
+                      {(app.status === "APPOINTED" || app.status === "DEMO_SCHEDULED") && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setReviewTutor(app)}
+                          className="text-xs font-bold gap-1.5 text-amber-700 border-amber-300 hover:bg-amber-50"
+                        >
+                          <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                          Review & Rate
+                        </Button>
+                      )}
                     </div>
 
                     {/* Appoint / Confirm Button */}
@@ -578,6 +609,30 @@ export function GuardianJobApplicantsClient({ jobId }: GuardianJobApplicantsClie
               </div>
             </div>
           </div>
+        )}
+
+        {/* Direct Tutor & Guardian Chat / Comments Modal */}
+        {chatApp && (
+          <ApplicationChatModal
+            applicationId={chatApp.id}
+            jobId={Number(jobId)}
+            jobTitle={job?.title}
+            otherPartyName={chatApp.tutorName}
+            otherPartyRole="TUTOR"
+            currentUserRole="GUARDIAN"
+            onClose={() => setChatApp(null)}
+          />
+        )}
+
+        {/* Tutor Review & Rating Modal */}
+        {reviewTutor && (
+          <TutorReviewModal
+            tutorId={reviewTutor.tutorId}
+            tutorName={reviewTutor.tutorName}
+            jobTitle={job?.title}
+            onClose={() => setReviewTutor(null)}
+            onSuccess={() => fetchApplicants()}
+          />
         )}
       </div>
     </div>

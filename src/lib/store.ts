@@ -11,6 +11,9 @@ import {
   Invoice,
   JobStatus,
   ApplicationStatus,
+  JobComment,
+  ApplicationMessage,
+  TutorReview,
 } from "./types";
 
 // In-Memory Seed Storage for Instant Interaction & Testing
@@ -23,6 +26,9 @@ interface DBState {
   leads: Lead[];
   confirmations: ConfirmationLetter[];
   invoices: Invoice[];
+  comments: JobComment[];
+  applicationMessages: ApplicationMessage[];
+  reviews: TutorReview[];
 }
 
 declare global {
@@ -499,6 +505,89 @@ function getInitialDB(): DBState {
       },
     ],
     invoices: [],
+    comments: [
+      {
+        id: "comm_1",
+        jobId: 243138,
+        userId: "usr_tutor_1",
+        authorName: "Tanvir Ahmed (BUET CSE)",
+        authorRole: "TUTOR",
+        authorInstitution: "BUET",
+        message: "আসসালামু আলাইকুম। শনি-সোম-বুধবার কি ক্লাস নেওয়া যাবে? আমি ও-লেভেল ফিজিক্স ও হায়ার ম্যাথে স্পেশালাইজড।",
+        createdAt: "2026-10-28T14:30:00Z",
+        likes: 2,
+      },
+      {
+        id: "comm_2",
+        jobId: 243138,
+        userId: "usr_guardian_1",
+        authorName: "Nasreen Sultana (Guardian)",
+        authorRole: "GUARDIAN",
+        message: "ওয়ালাইকুম আসসালাম। হ্যাঁ, শনি-সোম-বুধবার বিকেল ৫:৩০ টায় সুবিধা হবে। আপনি আবেদন করতে পারেন।",
+        parentId: "comm_1",
+        createdAt: "2026-10-28T15:10:00Z",
+        likes: 1,
+      },
+      {
+        id: "comm_3",
+        jobId: 243056,
+        userId: "usr_tutor_2",
+        authorName: "Nusrat Jahan (DU English)",
+        authorRole: "TUTOR",
+        authorInstitution: "Dhaka University",
+        message: "Hi, I have 3+ years experience teaching English Medium students from Scholastica and Sunbeams. Is offline tuition preferred?",
+        createdAt: "2026-10-27T11:20:00Z",
+        likes: 3,
+      },
+    ],
+    applicationMessages: [
+      {
+        id: "msg_1",
+        applicationId: "app_1",
+        jobId: 243138,
+        senderId: "usr_guardian_1",
+        senderName: "Mrs. Nasreen Sultana",
+        senderRole: "GUARDIAN",
+        message: "আসসালামু আলাইকুম তানভীর। আপনার প্রোফাইল ও রেজাল্ট খুব ভালো লেগেছে। আগামী শুক্রবার বিকেলে কি ডেমো ক্লাস নিতে পারবেন?",
+        createdAt: "2026-10-28T16:00:00Z",
+        isRead: true,
+      },
+      {
+        id: "msg_2",
+        applicationId: "app_1",
+        jobId: 243138,
+        senderId: "usr_tutor_1",
+        senderName: "Tanvir Ahmed",
+        senderRole: "TUTOR",
+        message: "ওয়ালাইকুম আসসালাম ম্যাম। জি ইনশাআল্লাহ, শুক্রবার বিকেল ৫:৩০ টায় আমি সরাসরি এসে ১ ঘণ্টার ট্রায়াল ডেমো ক্লাস নেব।",
+        createdAt: "2026-10-28T16:25:00Z",
+        isRead: true,
+      },
+    ],
+    reviews: [
+      {
+        id: "rev_1",
+        tutorId: "tut_1",
+        guardianId: "grd_1",
+        guardianName: "Mrs. Nasreen Sultana",
+        rating: 5,
+        comment: "তানভীর ভাই অত্যন্ত দায়িত্বশীল ও যত্নবান শিক্ষক। আমার ছেলের ম্যাথ এবং ফিজিক্সের বেসিক ২ মাসেই অনেক উন্নত হয়েছে। হাইলি রিকমেন্ডেড!",
+        subjects: "Physics, Pure Mathematics",
+        className: "Class 8 / O Level",
+        createdAt: "2026-10-20T10:00:00Z",
+      },
+      {
+        id: "rev_2",
+        tutorId: "tut_1",
+        guardianId: "grd_2",
+        guardianName: "Engr. Rafiqul Islam",
+        rating: 5,
+        comment: "Excellent tutor from BUET. Very punctual, clear concept explanation, and friendly with students.",
+        subjects: "Higher Math, ICT",
+        className: "Class 9",
+        createdAt: "2026-10-15T12:00:00Z",
+      },
+    ],
   };
 }
 
@@ -794,4 +883,63 @@ export const DB = {
   },
 
   getLeads: () => db.leads,
+
+  // Comments & Discussions on Jobs
+  getJobComments: (jobId: number) => (db.comments || []).filter((c) => c.jobId === jobId),
+  addJobComment: (comment: Omit<JobComment, "id" | "createdAt" | "likes">) => {
+    if (!db.comments) db.comments = [];
+    const newComment: JobComment = {
+      ...comment,
+      id: `comm_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+      createdAt: new Date().toISOString(),
+      likes: 0,
+    };
+    db.comments.push(newComment);
+    return newComment;
+  },
+  likeJobComment: (commentId: string) => {
+    if (!db.comments) return null;
+    const comm = db.comments.find((c) => c.id === commentId);
+    if (comm) {
+      comm.likes = (comm.likes || 0) + 1;
+    }
+    return comm;
+  },
+
+  // Private Application Messages & Feedback (Tutor <-> Guardian)
+  getApplicationMessages: (applicationId: string) =>
+    (db.applicationMessages || []).filter((m) => m.applicationId === applicationId),
+  addApplicationMessage: (msg: Omit<ApplicationMessage, "id" | "createdAt" | "isRead">) => {
+    if (!db.applicationMessages) db.applicationMessages = [];
+    const newMsg: ApplicationMessage = {
+      ...msg,
+      id: `msg_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+      createdAt: new Date().toISOString(),
+      isRead: false,
+    };
+    db.applicationMessages.push(newMsg);
+    return newMsg;
+  },
+
+  // Tutor Reviews & Feedback
+  getTutorReviews: (tutorId: string) => (db.reviews || []).filter((r) => r.tutorId === tutorId),
+  addTutorReview: (review: Omit<TutorReview, "id" | "createdAt">) => {
+    if (!db.reviews) db.reviews = [];
+    const newRev: TutorReview = {
+      ...review,
+      id: `rev_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+      createdAt: new Date().toISOString(),
+    };
+    db.reviews.push(newRev);
+
+    // Update tutor's rating
+    const tutor = db.tutors.find((t) => t.id === review.tutorId);
+    if (tutor) {
+      const tutorRevs = db.reviews.filter((r) => r.tutorId === review.tutorId);
+      const avg = tutorRevs.reduce((sum, r) => sum + r.rating, 0) / tutorRevs.length;
+      tutor.rating = Number(avg.toFixed(1));
+      tutor.totalReviews = tutorRevs.length;
+    }
+    return newRev;
+  },
 };

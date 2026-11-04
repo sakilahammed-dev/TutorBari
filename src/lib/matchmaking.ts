@@ -103,7 +103,7 @@ export function matchTutorsForJob(jobId: number): TutorMatchResult[] {
     // 5. Rating & Verification Bonus (Max 10 pts)
     if (tutor.rating >= 4.8 && tutor.isVerified) {
       score += 10;
-      reasons.push(`High parent trust rating: ★ ${tutor.rating} (${tutor.totalReviews} reviews)`);
+      reasons.push(`High parent trust rating: ${tutor.rating} / 5.0 (${tutor.totalReviews} reviews)`);
     } else if (tutor.isVerified) {
       score += 6;
       reasons.push("Identity verified with official credentials");

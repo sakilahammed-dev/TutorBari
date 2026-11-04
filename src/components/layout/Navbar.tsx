@@ -74,7 +74,7 @@ export function Navbar() {
         <div className="mx-auto flex max-w-7xl items-center justify-between">
           <div className="flex items-center gap-4">
             <a href="tel:09613441122" className="flex items-center gap-1.5 hover:underline text-white font-medium">
-              <span>📞 Helpline: 09613 441122 / 01700-000001</span>
+              <span>Helpline: 09613 441122 / 01700-000001</span>
             </a>
             <span className="hidden sm:inline text-white/50">•</span>
             <span className="hidden sm:inline text-white/90">#1 Trusted Platform for Verified Tutors & Tuitions</span>

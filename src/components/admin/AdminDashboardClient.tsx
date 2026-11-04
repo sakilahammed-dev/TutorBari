@@ -501,7 +501,7 @@ export function AdminDashboardClient() {
                       <span>•</span>
                       <span><strong>Phone:</strong> {tutor.phone}</span>
                       <span>•</span>
-                      <span><strong>Rating:</strong> ★ {tutor.rating}</span>
+                      <span><strong>Rating:</strong> {tutor.rating} / 5.0</span>
                     </div>
 
                     {/* Uploaded Documents */}
@@ -698,7 +698,7 @@ export function AdminDashboardClient() {
                           </div>
 
                           <div className="text-xs text-slate-600 font-medium">
-                            {match.tutor.institution} — {match.tutor.department} (★ {match.tutor.rating})
+                            {match.tutor.institution} — {match.tutor.department} ({match.tutor.rating} / 5.0)
                           </div>
                           <div className="text-[11px] font-semibold text-purple-700 flex items-center gap-1">
                             <MapPin className="h-3 w-3" />
